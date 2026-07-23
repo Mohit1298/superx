@@ -4,5 +4,5 @@
     "api/cron-dealwatch.ts": { "maxDuration": 300 },
     "api/health.ts": { "maxDuration": 10 }
   },
-  "crons": [{ "path": "/api/cron-dealwatch", "schedule": "0 * * * *" }]
+  "crons": [{ "path": "/api/cron-dealwatch", "schedule": "0 14 * * *" }]
 }
