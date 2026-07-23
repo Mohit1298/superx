@@ -1,50 +1,33 @@
 # SuperX Launch Runbook
 
-State right now: code is Postgres-backed, verified, and running on the laptop with your data migrated. This doc gets it to 24/7 cloud + a public launch. **Order matters — the Meta production number (Step 2) is the launch gate: your current TEST number only talks to 5 verified people, so a LinkedIn post before Step 2 completes would send strangers to a number that ignores them.**
+State right now: **DEPLOYED AND LIVE** — Vercel serverless (compute) + Supabase Postgres (data, isolated `superx` schema), webhook on the production URL, agent answering with full history. **The remaining launch gate is the Meta production number (Step 2): the TEST number only talks to 5 verified people, so a LinkedIn post before Step 2 completes would send strangers to a number that ignores them.**
 
 ---
 
-## Step 1 — Deploy to Railway (~30 min, ~$5–10/mo)
+## Step 1 — Deploy ✅ DONE (Vercel + Supabase, $0 marginal on existing plans)
 
-Railway hosts the server AND gives you managed Postgres with a built-in table browser — that's your "SQL I can access anytime" (plus TablePlus/psql from anywhere with the connection string).
+Current architecture, for reference:
 
-1. Push the repo to GitHub (private):
-   ```bash
-   cd ~/Desktop/SuperX
-   git init && git add -A && git commit -m "SuperX v0.1"
-   gh repo create superx --private --source=. --push     # or create on github.com and push
-   ```
-2. [railway.app](https://railway.app) → sign in with GitHub → **New Project → Deploy from GitHub repo** → pick `superx`. It auto-detects `npm start`.
-3. In the project: **+ New → Database → PostgreSQL.**
-4. On the app service → **Variables**, add:
-   ```
-   ANTHROPIC_API_KEY   = sk-ant-...          (same key)
-   DATABASE_URL        = ${{Postgres.DATABASE_URL}}   ← reference the DB service
-   WHATSAPP_TOKEN      = (permanent System User token — Step 2a)
-   WHATSAPP_PHONE_NUMBER_ID = (current test id now; production id after Step 2b)
-   WHATSAPP_VERIFY_TOKEN    = superx-verify
-   MAX_USER_MSGS_PER_DAY    = 50
-   ```
-5. **Settings → Networking → Generate Domain** → you get `https://superx-production-xxxx.up.railway.app`. Set healthcheck path `/health`.
-6. Carry your data up (from the laptop):
-   ```bash
-   SQLITE_PATH=superx.db DATABASE_URL="<Railway public Postgres URL>" npx tsx scripts/migrate-sqlite.ts
-   ```
-   (Use the **public** connection string from the Postgres service → Connect tab. Same string works in TablePlus forever after.)
-7. Meta app → WhatsApp → Configuration → **update webhook** to `https://<railway-domain>/webhook`, verify token `superx-verify` → Verify and save → confirm `messages` still subscribed.
-8. Text Sam. When it replies, **the laptop is retired** — kill the local server/ngrok whenever.
+| Piece | Where | Notes |
+|---|---|---|
+| Compute | Vercel project `superx` → `https://superx-ten.vercel.app` | `/api/webhook` (Meta), `/api/health`, `/api/cron-dealwatch` (daily 10:00 Toronto), root `/` redirects into the WhatsApp chat |
+| Data | Supabase Postgres, **schema `superx`** (own role `superx_app`; Rivera untouched in `public`) | Browse: Table Editor → **schema dropdown (top-left) → `superx`** — it defaults to `public`, which is why the tables "look missing" |
+| Repo | github.com/Mohit1298/superx (private) | Push to `main` = auto-deploy |
+| Env/config | Vercel → superx → Settings → Environment Variables (change → **Redeploy** to apply) | `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `ANTHROPIC_API_KEY`, `DATABASE_URL`, `MAX_USER_MSGS_PER_DAY`, `CRON_SECRET`, `WA_LINK_NUMBER` |
+| Logs | Vercel → superx → Logs (live function output, errors) | |
+| Kill switch | Set `MAX_USER_MSGS_PER_DAY=0` + Redeploy, or pause the project | |
 
-Ops afterwards: logs live in Railway → service → Logs; DB browsing in Postgres service → **Data** tab; kill switch = pause the service.
+Ops notes: Vercel Hobby limits crons to daily (fine — items are checked per-24h anyway) and the Anthropic long turns fit in the function window. The laptop has zero role.
 
 ## Step 2 — Meta production (the launch gate — start TODAY, has waiting periods)
 
 **2a. Permanent token (15 min, removes the daily breakage forever):**
-[business.facebook.com](https://business.facebook.com) → Settings → Users → **System Users** → Add (`superx-server`, Admin) → Add Assets → your app (full control) → **Generate Token** → expiry **Never**, scopes `whatsapp_business_messaging` + `whatsapp_business_management` → paste into Railway variables.
+[business.facebook.com](https://business.facebook.com) → Settings → Users → **System Users** → Add (`superx-server`, Admin) → Add Assets → your app (full control) → **Generate Token** → expiry **Never**, scopes `whatsapp_business_messaging` + `whatsapp_business_management` → paste into Vercel env (`WHATSAPP_TOKEN`) → Redeploy.
 
 **2b. Real phone number (1–2 days):**
 - Get a number that has never been on WhatsApp (cheapest: a prepaid SIM/eSIM; a landline you can receive a verification call on also works).
 - Meta app → WhatsApp → API Setup → **Add phone number** → verify → set display name **SuperX** (name goes through a short review).
-- Update `WHATSAPP_PHONE_NUMBER_ID` in Railway. This number is what goes in every marketing asset — it can message ANYONE who texts it first. Unverified businesses start with a cap on *business-initiated* conversations (~250/day) — fine, because your growth is user-initiated (unlimited).
+- Update `WHATSAPP_PHONE_NUMBER_ID` **and** `WA_LINK_NUMBER` in Vercel env → Redeploy. This number is what goes in every marketing asset — it can message ANYONE who texts it first. Unverified businesses start with a cap on *business-initiated* conversations (~250/day) — fine, because your growth is user-initiated (unlimited).
 - ⚠️ Deal-watch pings to users who haven't texted in 24h count as business-initiated and eventually need an approved **template**. Until the template is approved, blocked pings are stored and surfaced next chat (already built). Create the template early: WhatsApp Manager → Message templates → e.g. `deal_alert` "🔔 A wishlist item just hit your target price: {{1}}. Reply for details." → submit for review.
 
 **2c. Business verification (days–weeks — start now, don't block launch on it):**
@@ -52,7 +35,7 @@ Business Settings → Security Centre → Start verification. Needs a legal busi
 
 ## Step 3 — Pre-launch checklist (the day before posting)
 
-- [ ] Railway deployed, webhook green, Sam answering from the **production number**
+- [x] Deployed (Vercel + Supabase), webhook green, Sam answering ✅ — remaining: swap to the **production number**
 - [ ] Permanent token in place (no more 24h deaths)
 - [ ] Per-user cap live (it is — `MAX_USER_MSGS_PER_DAY=50`) 
 - [ ] Anthropic console → Billing → set a **budget alert** (e.g. $50/mo). Rough cost: an active user ≈ $0.10–0.40/day on Opus; 100 casual users ≈ $50–150/mo. Lever if it runs hot: `ANTHROPIC_MODEL=claude-sonnet-5` cuts ~40% with minor quality loss — your call, flip anytime.
