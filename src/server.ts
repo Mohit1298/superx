@@ -12,6 +12,11 @@ export function createServer() {
     res.json({ ok: true, service: "superx" });
   });
 
+  // Root: hand humans straight to the WhatsApp chat.
+  app.get("/", (_req, res) => {
+    res.redirect(`https://wa.me/${config.waLinkNumber}?text=hi`);
+  });
+
   // Meta webhook verification handshake
   app.get("/webhook", (req, res) => {
     const mode = req.query["hub.mode"];
@@ -37,3 +42,8 @@ export function createServer() {
 
   return app;
 }
+
+// Vercel's Express preset loads this module directly and requires the app as
+// the default export. Local/server-ful runs use createServer() via index.ts.
+const app = createServer();
+export default app;

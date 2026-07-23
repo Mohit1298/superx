@@ -23,6 +23,8 @@ export const config = {
   },
   port: Number(process.env.PORT ?? 3000),
   dbPath: process.env.DB_PATH ?? "superx.db",
+  // Number people text to reach the agent (for wa.me links on the landing/root)
+  waLinkNumber: process.env.WA_LINK_NUMBER ?? "15551879714",
   whatsapp: {
     token: process.env.WHATSAPP_TOKEN ?? "",
     phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID ?? "",
