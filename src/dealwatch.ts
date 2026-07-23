@@ -7,7 +7,7 @@
  *  - pings only on real hits (<= ceiling, or clear discount when no ceiling),
  *    and only when the price beats the last alerted price
  */
-import Anthropic from "@anthropic-ai/sdk";
+import { Anthropic } from "@anthropic-ai/sdk";
 import { config } from "./config.js";
 import {
   addMessage,
@@ -62,7 +62,11 @@ async function checkItemsForUser(items: WishlistItem[]): Promise<CheckResult[]> 
     max_price: w.price_ceiling_cents != null ? w.price_ceiling_cents / 100 : null,
   }));
 
-  let messages: Anthropic.MessageParam[] = [{ role: "user", content: JSON.stringify(payload) }];
+  // content is string on the first turn and a content-block array on
+  // pause_turn continuations; typed loosely to stay resolution-agnostic.
+  let messages: { role: "user" | "assistant"; content: any }[] = [
+    { role: "user", content: JSON.stringify(payload) },
+  ];
   let response = await getClient().messages.create({
     model: config.dealWatch.model,
     max_tokens: 1500,
@@ -84,8 +88,8 @@ async function checkItemsForUser(items: WishlistItem[]): Promise<CheckResult[]> 
   }
 
   const text = response.content
-    .filter((b): b is Anthropic.TextBlock => b.type === "text")
-    .map((b) => b.text)
+    .filter((b: { type: string; text?: string }) => b.type === "text")
+    .map((b: { type: string; text?: string }) => b.text ?? "")
     .join("");
   return parseResults(text);
 }

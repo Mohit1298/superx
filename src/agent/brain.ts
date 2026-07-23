@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import { Anthropic } from "@anthropic-ai/sdk";
 import { config } from "../config.js";
 import { addMessage, countInboundLastDay, getOrCreateUser, recentMessages, setOptedOut } from "../db.js";
 import { PERSONA, buildDynamicContext } from "./prompts.js";
@@ -60,7 +60,7 @@ export async function handleIncomingMessage(phone: string, text: string, sendTo:
   // Rebuild conversation window. First message must be role "user".
   const history = await recentMessages(user.id, 30);
   while (history.length && history[0].direction === "out") history.shift();
-  const messages: Anthropic.Beta.BetaMessageParam[] = history.map((m) => ({
+  const messages: { role: "user" | "assistant"; content: string }[] = history.map((m) => ({
     role: m.direction === "in" ? ("user" as const) : ("assistant" as const),
     content: m.body,
   }));
@@ -87,7 +87,7 @@ export async function handleIncomingMessage(phone: string, text: string, sendTo:
 
     // Iterate rather than await: server-tool turns can stop with
     // stop_reason "pause_turn", which the runner doesn't auto-resume.
-    let final: Anthropic.Beta.BetaMessage | null = null;
+    let final: { content: Array<{ type: string; text?: string }>; stop_reason?: string | null } | null = null;
     for await (const message of runner) {
       final = message;
       if (message.stop_reason === "pause_turn") {
@@ -98,8 +98,8 @@ export async function handleIncomingMessage(phone: string, text: string, sendTo:
     // Join with "" (not "\n"): web-search citations split sentences across
     // text blocks, and spans carry their own spacing. Then tidy whitespace.
     const reply = (final?.content ?? [])
-      .filter((b): b is Anthropic.Beta.BetaTextBlock => b.type === "text")
-      .map((b) => b.text)
+      .filter((b: { type: string; text?: string }) => b.type === "text")
+      .map((b: { type: string; text?: string }) => b.text ?? "")
       .join("")
       .replace(/\n{3,}/g, "\n\n")
       .trim();
