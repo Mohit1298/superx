@@ -36,6 +36,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       await deletePartnerProduct(shop, Number(payload.id));
     } else if (topic === "products/update" || topic === "products/create") {
       await upsertPartnerProduct(shop, payload);
+    } else if (topic === "customers/data_request" || topic === "customers/redact") {
+      // Mandatory GDPR topics. We never receive or store store-customer data
+      // (read_products only), so there is nothing to return or redact.
+      console.log(`[shopify] compliance ${topic} for ${shop}: no customer data held`);
+    } else if (topic === "shop/redact") {
+      await removeMerchant(shop); // idempotent; products cascade
     }
   } catch (err) {
     console.error(`[shopify] webhook ${topic} for ${shop} failed:`, err);

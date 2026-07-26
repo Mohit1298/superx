@@ -16,3 +16,8 @@ redirect_urls = [ "https://superx-ten.vercel.app/api/shopify/callback" ]
 
 [webhooks]
 api_version = "2026-07"
+
+  [webhooks.privacy_compliance]
+  customer_data_request_url = "https://superx-ten.vercel.app/api/shopify/webhook"
+  customer_deletion_url = "https://superx-ten.vercel.app/api/shopify/webhook"
+  shop_deletion_url = "https://superx-ten.vercel.app/api/shopify/webhook"
