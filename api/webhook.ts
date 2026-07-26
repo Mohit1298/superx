@@ -3,7 +3,12 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import { config } from "../src/config.js";
 import { markProcessed } from "../src/db.js";
-import { extractIncoming, sendTypingIndicator, sendWhatsAppText } from "../src/channels/whatsapp.js";
+import {
+  downloadWhatsAppMedia,
+  extractIncoming,
+  sendTypingIndicator,
+  sendWhatsAppText,
+} from "../src/channels/whatsapp.js";
 import { handleIncomingMessage } from "../src/agent/brain.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -30,8 +35,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     (async () => {
       for (const msg of extractIncoming(req.body)) {
         if (!(await markProcessed(msg.waMessageId))) continue; // duplicate delivery
+        if (msg.unsupported) {
+          await sendWhatsAppText(
+            msg.from,
+            `I can read text and photos for now — send a screenshot or a link and I'm on it 🙂`
+          );
+          continue;
+        }
         await sendTypingIndicator(msg.waMessageId);
-        await handleIncomingMessage(msg.from, msg.text, sendWhatsAppText);
+        const image = msg.imageId ? ((await downloadWhatsAppMedia(msg.imageId)) ?? undefined) : undefined;
+        if (msg.imageId && !image) {
+          await sendWhatsAppText(msg.from, `Hmm, that image didn't come through — mind resending it, or paste the link instead?`);
+          continue;
+        }
+        const text = msg.text?.trim() ? msg.text : image ? "[sent a photo]" : "";
+        if (!text && !image) continue;
+        await handleIncomingMessage(msg.from, text, sendWhatsAppText, image);
       }
     })().catch((e) => console.error("[webhook]", e))
   );

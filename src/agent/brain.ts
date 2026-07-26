@@ -15,11 +15,22 @@ function getClient(): Anthropic {
 const OPT_OUT = new Set(["stop", "unsubscribe", "opt out", "optout"]);
 const OPT_IN = new Set(["start", "unstop", "opt in", "optin"]);
 
+export interface InboundImage {
+  base64: string;
+  mediaType: string;
+}
+
 /**
  * Handle one inbound message from a member and reply (plus any cross-member
- * side effects the tools trigger, e.g. intro proposals).
+ * side effects the tools trigger, e.g. intro proposals). `image` rides along
+ * only in the live turn — history stores the caption/placeholder text.
  */
-export async function handleIncomingMessage(phone: string, text: string, sendTo: SendFn): Promise<void> {
+export async function handleIncomingMessage(
+  phone: string,
+  text: string,
+  sendTo: SendFn,
+  image?: InboundImage
+): Promise<void> {
   const user = await getOrCreateUser(phone);
   const normalized = text.trim().toLowerCase();
 
@@ -60,11 +71,23 @@ export async function handleIncomingMessage(phone: string, text: string, sendTo:
   // Rebuild conversation window. First message must be role "user".
   const history = await recentMessages(user.id, 30);
   while (history.length && history[0].direction === "out") history.shift();
-  const messages: { role: "user" | "assistant"; content: string }[] = history.map((m) => ({
+  const messages: { role: "user" | "assistant"; content: any }[] = history.map((m) => ({
     role: m.direction === "in" ? ("user" as const) : ("assistant" as const),
     content: m.body,
   }));
   if (messages.length === 0) messages.push({ role: "user", content: text });
+
+  // The member sent a photo/screenshot: swap the final user turn (stored as
+  // caption/placeholder text) for real multimodal content.
+  if (image) {
+    messages[messages.length - 1] = {
+      role: "user",
+      content: [
+        { type: "image", source: { type: "base64", media_type: image.mediaType, data: image.base64 } },
+        { type: "text", text },
+      ],
+    };
+  }
 
   try {
     const runner = getClient().beta.messages.toolRunner({

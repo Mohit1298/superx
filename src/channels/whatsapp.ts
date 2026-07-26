@@ -74,15 +74,17 @@ export async function sendTypingIndicator(waMessageId: string): Promise<void> {
   }
 }
 
-export interface IncomingText {
+export interface IncomingMessage {
   waMessageId: string;
   from: string; // sender phone in international format, no '+'
-  text: string;
+  text?: string; // text body, or the image caption
+  imageId?: string; // Cloud API media id when the member sent a photo
+  unsupported?: string; // message type we can't read yet (audio, video, ...)
 }
 
-/** Pull text messages out of a Cloud API webhook payload. */
-export function extractIncoming(body: unknown): IncomingText[] {
-  const out: IncomingText[] = [];
+/** Pull text and image messages out of a Cloud API webhook payload. */
+export function extractIncoming(body: unknown): IncomingMessage[] {
+  const out: IncomingMessage[] = [];
   const entries = (body as { entry?: unknown[] })?.entry ?? [];
   for (const entry of entries as { changes?: unknown[] }[]) {
     for (const change of (entry.changes ?? []) as { value?: { messages?: unknown[] } }[]) {
@@ -91,12 +93,52 @@ export function extractIncoming(body: unknown): IncomingText[] {
         from?: string;
         type?: string;
         text?: { body?: string };
+        image?: { id?: string; caption?: string };
       }[]) {
-        if (msg.type === "text" && msg.id && msg.from && msg.text?.body) {
+        if (!msg.id || !msg.from) continue;
+        if (msg.type === "text" && msg.text?.body) {
           out.push({ waMessageId: msg.id, from: msg.from, text: msg.text.body });
+        } else if (msg.type === "image" && msg.image?.id) {
+          out.push({ waMessageId: msg.id, from: msg.from, imageId: msg.image.id, text: msg.image.caption });
+        } else if (msg.type) {
+          out.push({ waMessageId: msg.id, from: msg.from, unsupported: msg.type });
         }
       }
     }
   }
   return out;
+}
+
+// Image formats Claude accepts; WhatsApp photos are JPEG/PNG in practice.
+const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"]);
+const MAX_MEDIA_BYTES = 8 * 1024 * 1024;
+
+/**
+ * Fetch a WhatsApp media object (two-step: metadata, then the file itself —
+ * both require the bearer token). Returns null on any failure or oversize;
+ * callers degrade gracefully rather than crash the turn.
+ */
+export async function downloadWhatsAppMedia(
+  mediaId: string
+): Promise<{ base64: string; mediaType: string } | null> {
+  try {
+    const metaRes = await fetch(`https://graph.facebook.com/${config.whatsapp.apiVersion}/${mediaId}`, {
+      headers: { Authorization: `Bearer ${config.whatsapp.token}` },
+    });
+    if (!metaRes.ok) return null;
+    const meta = (await metaRes.json()) as { url?: string; mime_type?: string; file_size?: number };
+    if (!meta.url || !IMAGE_TYPES.has(meta.mime_type ?? "") || (meta.file_size ?? 0) > MAX_MEDIA_BYTES) {
+      return null;
+    }
+    const fileRes = await fetch(meta.url, {
+      headers: { Authorization: `Bearer ${config.whatsapp.token}` },
+    });
+    if (!fileRes.ok) return null;
+    const buf = Buffer.from(await fileRes.arrayBuffer());
+    if (buf.byteLength > MAX_MEDIA_BYTES) return null;
+    return { base64: buf.toString("base64"), mediaType: meta.mime_type! };
+  } catch (err) {
+    console.error("[whatsapp] media download failed:", err instanceof Error ? err.message : err);
+    return null;
+  }
 }

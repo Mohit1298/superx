@@ -2,7 +2,12 @@ import express from "express";
 import { config } from "./config.js";
 import { markProcessed } from "./db.js";
 import { enqueue, handleIncomingMessage } from "./agent/brain.js";
-import { extractIncoming, sendTypingIndicator, sendWhatsAppText } from "./channels/whatsapp.js";
+import {
+  downloadWhatsAppMedia,
+  extractIncoming,
+  sendTypingIndicator,
+  sendWhatsAppText,
+} from "./channels/whatsapp.js";
 
 export function createServer() {
   const app = express();
@@ -65,8 +70,22 @@ export function createServer() {
     (async () => {
       for (const msg of extractIncoming(req.body)) {
         if (!(await markProcessed(msg.waMessageId))) continue; // duplicate delivery
+        if (msg.unsupported) {
+          await sendWhatsAppText(
+            msg.from,
+            `I can read text and photos for now — send a screenshot or a link and I'm on it 🙂`
+          );
+          continue;
+        }
         await sendTypingIndicator(msg.waMessageId);
-        enqueue(msg.from, () => handleIncomingMessage(msg.from, msg.text, sendWhatsAppText));
+        const image = msg.imageId ? ((await downloadWhatsAppMedia(msg.imageId)) ?? undefined) : undefined;
+        if (msg.imageId && !image) {
+          await sendWhatsAppText(msg.from, `Hmm, that image didn't come through — mind resending it, or paste the link instead?`);
+          continue;
+        }
+        const text = msg.text?.trim() ? msg.text : image ? "[sent a photo]" : "";
+        if (!text && !image) continue;
+        enqueue(msg.from, () => handleIncomingMessage(msg.from, text, sendWhatsAppText, image));
       }
     })().catch((e) => console.error("[webhook]", e));
   });
