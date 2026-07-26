@@ -47,6 +47,49 @@ async function notify(ctx: ToolCtx, target: User, text: string): Promise<void> {
 }
 
 const waLink = (phone: string) => `https://wa.me/${phone.replace(/[^0-9]/g, "")}`;
+
+/**
+ * Live prices straight from a Shopify storefront's public search endpoint —
+ * exact current numbers (vs. search-snippet guesses) for the huge share of
+ * DTC/boutique brands on Shopify. No auth; errors tell the model to fall
+ * back to web search.
+ */
+export async function shopifyLivePrices(store: string, query: string): Promise<string> {
+  const domain = store
+    .replace(/^https?:\/\//, "")
+    .split("/")[0]
+    .trim()
+    .toLowerCase();
+  if (!domain.includes(".")) return JSON.stringify({ error: "invalid store domain" });
+  const url = `https://${domain}/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`;
+  try {
+    const res = await fetch(url, {
+      signal: AbortSignal.timeout(6000),
+      headers: { accept: "application/json" },
+      redirect: "follow",
+    });
+    if (!res.ok || !(res.headers.get("content-type") ?? "").includes("json")) {
+      return JSON.stringify({ error: `no Shopify endpoint at ${domain} — use web search instead` });
+    }
+    const data = (await res.json()) as {
+      resources?: { results?: { products?: Array<Record<string, unknown>> } };
+    };
+    const prods = data.resources?.results?.products ?? [];
+    if (prods.length === 0) {
+      return JSON.stringify({ store: domain, found: [], note: "Shopify store answered but nothing matched — try different words or web search" });
+    }
+    const found = prods.slice(0, 6).map((p) => ({
+      title: p.title,
+      price: p.price ?? p.price_min ?? null,
+      compare_at: p.compare_at_price_max ?? null,
+      available: p.available ?? null,
+      url: typeof p.url === "string" && p.url.startsWith("/") ? `https://${domain}${p.url}` : p.url,
+    }));
+    return JSON.stringify({ store: domain, live: true, currency_note: "prices in the store's own currency", found });
+  } catch {
+    return JSON.stringify({ error: `${domain} didn't answer in time — use web search instead` });
+  }
+}
 const firstName = (u: User) => u.name?.split(" ")[0] ?? "a member";
 const trunc = (s: string | null, n = 200): string | null => (s && s.length > n ? s.slice(0, n) + "…" : s);
 
@@ -420,6 +463,22 @@ export const impls = {
 export function buildTools(ctx: ToolCtx) {
   // Phase 1 (shopping copilot) tools — always on.
   const core = [
+    betaTool({
+      name: "shopify_live_prices",
+      description:
+        "Exact LIVE prices from any Shopify-powered store (most DTC/boutique brands, incl. many Canadian retailers). Try this FIRST whenever the member names or links a specific store — it beats search snippets. If it errors, fall back to web_fetch/web_search. Prices are the store's public prices.",
+      inputSchema: {
+        type: "object" as const,
+        properties: {
+          store: { type: "string", description: "Store domain or any URL from it, e.g. 'knix.ca' or a product link" },
+          query: { type: "string", description: "Product words to search, e.g. 'baggy jean dark grey'" },
+        },
+        required: ["store", "query"],
+        additionalProperties: false,
+      },
+      run: (input) => shopifyLivePrices((input as { store: string }).store, (input as { query: string }).query),
+    }),
+
     betaTool({
       name: "update_profile",
       description:

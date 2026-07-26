@@ -20,6 +20,9 @@ export const config = {
     model: process.env.DEAL_WATCH_MODEL ?? "claude-haiku-4-5",
     itemIntervalHours: Number(process.env.DEAL_WATCH_HOURS ?? 24),
     maxItemsPerRun: Number(process.env.DEAL_WATCH_MAX ?? 25),
+    // Approved utility template used when the member's 24h window is closed.
+    templateName: process.env.DEAL_ALERT_TEMPLATE ?? "deal_alert",
+    templateLang: process.env.DEAL_ALERT_TEMPLATE_LANG ?? "en_US",
   },
   port: Number(process.env.PORT ?? 3000),
   dbPath: process.env.DB_PATH ?? "superx.db",

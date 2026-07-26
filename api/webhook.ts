@@ -2,7 +2,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import { config } from "../src/config.js";
-import { markProcessed } from "../src/db.js";
+import { markProcessed, withUserLock } from "../src/db.js";
 import {
   downloadWhatsAppMedia,
   extractIncoming,
@@ -50,7 +50,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
         const text = msg.text?.trim() ? msg.text : image ? "[sent a photo]" : "";
         if (!text && !image) continue;
-        await handleIncomingMessage(msg.from, text, sendWhatsAppText, image);
+        // Bursts arrive as parallel invocations; the advisory lock serializes
+        // turns per member so replies stay ordered and in-context.
+        await withUserLock(msg.from, () => handleIncomingMessage(msg.from, text, sendWhatsAppText, image));
       }
     })().catch((e) => console.error("[webhook]", e))
   );

@@ -46,6 +46,38 @@ export async function sendWhatsAppText(to: string, body: string): Promise<void> 
 }
 
 /**
+ * Send an approved template message — the only way to reach a member whose
+ * 24h service window has closed (e.g. deal-watch pings to quiet users).
+ */
+export async function sendWhatsAppTemplate(to: string, name: string, lang: string, params: string[]): Promise<void> {
+  const url = `https://graph.facebook.com/${config.whatsapp.apiVersion}/${config.whatsapp.phoneNumberId}/messages`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${config.whatsapp.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: to.replace(/[^0-9]/g, ""),
+      type: "template",
+      template: {
+        name,
+        language: { code: lang },
+        components: [
+          { type: "body", parameters: params.map((text) => ({ type: "text", text })) },
+        ],
+      },
+    }),
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(`WhatsApp template send failed (${res.status}): ${detail}`);
+  }
+}
+
+/**
  * Mark an inbound message read and show "typing…" while the brain works.
  * Cosmetic: never throws — a failed indicator must not cost anyone a reply.
  * WhatsApp clears it when we send, or after ~25s on the longest turns.

@@ -116,6 +116,28 @@ function makePool(): pg.Pool {
 
 const pool = makePool();
 
+/**
+ * Serialize work per member across serverless invocations. WhatsApp users text
+ * in bursts; on Vercel each message is an isolated invocation, so an in-memory
+ * queue can't order them — a session-level Postgres advisory lock can. The
+ * lock rides its own connection (auto-released if the function dies) while the
+ * work inside uses the normal pool.
+ */
+const LOCK_CLASS = 7742; // app-scoped advisory lock namespace ("SX")
+export async function withUserLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  const client = await pool.connect();
+  try {
+    await client.query("SELECT pg_advisory_lock($1, hashtext($2))", [LOCK_CLASS, key]);
+    try {
+      return await fn();
+    } finally {
+      await client.query("SELECT pg_advisory_unlock($1, hashtext($2))", [LOCK_CLASS, key]).catch(() => {});
+    }
+  } finally {
+    client.release();
+  }
+}
+
 async function q<T = Record<string, unknown>>(text: string, params: unknown[] = []): Promise<T[]> {
   const res = await pool.query(text, params);
   return res.rows as T[];

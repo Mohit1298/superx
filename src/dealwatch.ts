@@ -21,6 +21,7 @@ import {
   wishlistDueForCheck,
 } from "./db.js";
 import { SendFn } from "./agent/tools.js";
+import { sendWhatsAppTemplate } from "./channels/whatsapp.js";
 
 let _client: Anthropic | null = null;
 const getClient = () => (_client ??= new Anthropic());
@@ -155,10 +156,26 @@ export async function runDealWatch(sendTo: SendFn): Promise<DealWatchSummary> {
         await recordDealAlert(item.id, priceCents);
         summary.pinged++;
       } catch (err) {
-        // Likely outside WhatsApp's 24h service window — deal stays stored on
-        // the item, so Shoppy surfaces it next time the member texts.
+        // Free-form blocked — almost always the closed 24h service window.
+        // Fall back to the approved utility template; a reply re-opens the
+        // window and Shoppy then shares the link/details.
         console.error(`[dealwatch] ping blocked for ${user.phone}:`, err instanceof Error ? err.message : err);
-        summary.stored++;
+        try {
+          const param = `${item.item} — ${fmtMoney(priceCents)} CAD${r.store ? ` at ${r.store}` : ""}`;
+          await sendWhatsAppTemplate(
+            user.phone,
+            config.dealWatch.templateName,
+            config.dealWatch.templateLang,
+            [param.slice(0, 400)]
+          );
+          await recordDealAlert(item.id, priceCents);
+          summary.pinged++;
+        } catch (tplErr) {
+          // Template also failed (not yet approved / wrong lang code) — deal
+          // stays stored on the item and surfaces next time the member texts.
+          console.error(`[dealwatch] template fallback failed for ${user.phone}:`, tplErr instanceof Error ? tplErr.message : tplErr);
+          summary.stored++;
+        }
       }
     }
   }
