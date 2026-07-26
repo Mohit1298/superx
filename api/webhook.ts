@@ -3,7 +3,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import { config } from "../src/config.js";
 import { markProcessed } from "../src/db.js";
-import { extractIncoming, sendWhatsAppText } from "../src/channels/whatsapp.js";
+import { extractIncoming, sendTypingIndicator, sendWhatsAppText } from "../src/channels/whatsapp.js";
 import { handleIncomingMessage } from "../src/agent/brain.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -30,6 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     (async () => {
       for (const msg of extractIncoming(req.body)) {
         if (!(await markProcessed(msg.waMessageId))) continue; // duplicate delivery
+        await sendTypingIndicator(msg.waMessageId);
         await handleIncomingMessage(msg.from, msg.text, sendWhatsAppText);
       }
     })().catch((e) => console.error("[webhook]", e))

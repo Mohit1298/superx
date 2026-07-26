@@ -2,7 +2,7 @@ import express from "express";
 import { config } from "./config.js";
 import { markProcessed } from "./db.js";
 import { enqueue, handleIncomingMessage } from "./agent/brain.js";
-import { extractIncoming, sendWhatsAppText } from "./channels/whatsapp.js";
+import { extractIncoming, sendTypingIndicator, sendWhatsAppText } from "./channels/whatsapp.js";
 
 export function createServer() {
   const app = express();
@@ -65,6 +65,7 @@ export function createServer() {
     (async () => {
       for (const msg of extractIncoming(req.body)) {
         if (!(await markProcessed(msg.waMessageId))) continue; // duplicate delivery
+        await sendTypingIndicator(msg.waMessageId);
         enqueue(msg.from, () => handleIncomingMessage(msg.from, msg.text, sendWhatsAppText));
       }
     })().catch((e) => console.error("[webhook]", e));

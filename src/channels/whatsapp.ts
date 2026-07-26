@@ -45,6 +45,35 @@ export async function sendWhatsAppText(to: string, body: string): Promise<void> 
   }
 }
 
+/**
+ * Mark an inbound message read and show "typing…" while the brain works.
+ * Cosmetic: never throws — a failed indicator must not cost anyone a reply.
+ * WhatsApp clears it when we send, or after ~25s on the longest turns.
+ */
+export async function sendTypingIndicator(waMessageId: string): Promise<void> {
+  const url = `https://graph.facebook.com/${config.whatsapp.apiVersion}/${config.whatsapp.phoneNumberId}/messages`;
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${config.whatsapp.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messaging_product: "whatsapp",
+        status: "read",
+        message_id: waMessageId,
+        typing_indicator: { type: "text" },
+      }),
+    });
+    if (!res.ok) {
+      console.error(`[whatsapp] typing indicator failed (${res.status}):`, await res.text().catch(() => ""));
+    }
+  } catch (err) {
+    console.error("[whatsapp] typing indicator error:", err instanceof Error ? err.message : err);
+  }
+}
+
 export interface IncomingText {
   waMessageId: string;
   from: string; // sender phone in international format, no '+'
