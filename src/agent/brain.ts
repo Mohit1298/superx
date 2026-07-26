@@ -115,6 +115,12 @@ export async function handleIncomingMessage(
     let final: { content: Array<{ type: string; text?: string }>; stop_reason?: string | null } | null = null;
     for await (const message of runner) {
       final = message;
+      // Telemetry for the narration-leak hunt: exact block shape of every
+      // turn, so a leaked reply in the wild maps back to its structure.
+      console.log(
+        `[brain] turn blocks (stop=${message.stop_reason}):`,
+        message.content.map((b: { type: string }) => b.type).join(",")
+      );
       if (message.stop_reason === "pause_turn") {
         runner.pushMessages({ role: "assistant", content: message.content });
       }
