@@ -100,7 +100,9 @@ export function extractIncoming(body: unknown): IncomingMessage[] {
           out.push({ waMessageId: msg.id, from: msg.from, text: msg.text.body });
         } else if (msg.type === "image" && msg.image?.id) {
           out.push({ waMessageId: msg.id, from: msg.from, imageId: msg.image.id, text: msg.image.caption });
-        } else if (msg.type) {
+        } else if (msg.type && !["reaction", "ephemeral", "system"].includes(msg.type)) {
+          // Reactions (👍 on our replies) and system events must stay silent;
+          // real content types we can't read yet get a friendly fallback.
           out.push({ waMessageId: msg.id, from: msg.from, unsupported: msg.type });
         }
       }
