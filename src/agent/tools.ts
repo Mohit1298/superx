@@ -1,6 +1,6 @@
 import { betaTool } from "@anthropic-ai/sdk/helpers/beta/json-schema";
 import { config } from "../config.js";
-import { searchPartnerCatalog } from "../db.js";
+import { deleteUserData, searchPartnerCatalog } from "../db.js";
 import {
   addMessage,
   addNote,
@@ -464,6 +464,30 @@ export const impls = {
 export function buildTools(ctx: ToolCtx) {
   // Phase 1 (shopping copilot) tools — always on.
   const core = [
+    betaTool({
+      name: "delete_my_data",
+      description:
+        "PERMANENTLY erase everything stored about this member: messages, wishlist, notes, profile, phone number. Call ONLY after the member explicitly asked for deletion AND confirmed with a clear yes in this conversation. Irreversible. After it returns, send one short goodbye — their history is already gone.",
+      inputSchema: {
+        type: "object" as const,
+        properties: {
+          confirmed: {
+            type: "boolean",
+            description: "true only if the member explicitly confirmed full deletion this conversation",
+          },
+        },
+        required: ["confirmed"],
+        additionalProperties: false,
+      },
+      run: async (input) => {
+        if (!(input as { confirmed: boolean }).confirmed) {
+          return "NOT deleted — ask the member to explicitly confirm full, irreversible deletion first.";
+        }
+        await deleteUserData(ctx.userId);
+        return "Done: all member data erased (messages, wishlist, profile, phone). Send a brief goodbye; do not store anything new.";
+      },
+    }),
+
     betaTool({
       name: "search_partner_catalog",
       description:

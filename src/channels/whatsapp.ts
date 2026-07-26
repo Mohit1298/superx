@@ -119,7 +119,13 @@ export function extractIncoming(body: unknown): IncomingMessage[] {
   const out: IncomingMessage[] = [];
   const entries = (body as { entry?: unknown[] })?.entry ?? [];
   for (const entry of entries as { changes?: unknown[] }[]) {
-    for (const change of (entry.changes ?? []) as { value?: { messages?: unknown[] } }[]) {
+    for (const change of (entry.changes ?? []) as {
+      value?: { metadata?: { phone_number_id?: string }; messages?: unknown[] };
+    }[]) {
+      // Only serve the configured number. The WABA also carries the old test
+      // number; answering its threads from the new number confuses people.
+      const receivedOn = change.value?.metadata?.phone_number_id;
+      if (receivedOn && receivedOn !== config.whatsapp.phoneNumberId) continue;
       for (const msg of (change.value?.messages ?? []) as {
         id?: string;
         from?: string;

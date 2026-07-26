@@ -599,6 +599,36 @@ export async function resetDb(): Promise<void> {
   );
 }
 
+// ---------- privacy: full member erasure ----------
+
+/**
+ * Erase everything we hold on a member (privacy-page promise). Child rows are
+ * deleted outright; the user row is anonymized rather than deleted so the
+ * in-flight turn can still complete — the phone (the actual PII) is destroyed,
+ * and a future text from that number starts a brand-new blank member.
+ */
+export async function deleteUserData(userId: number): Promise<void> {
+  await q(
+    `DELETE FROM ledger WHERE offer_id IN
+       (SELECT id FROM offers WHERE requester_id = $1 OR fulfiller_id = $1)`,
+    [userId]
+  );
+  await q("DELETE FROM offers WHERE requester_id = $1 OR fulfiller_id = $1", [userId]);
+  await q("DELETE FROM intros WHERE requester_id = $1 OR candidate_id = $1", [userId]);
+  await q("DELETE FROM tasks WHERE user_id = $1", [userId]);
+  await q("DELETE FROM notes WHERE user_id = $1", [userId]);
+  await q("DELETE FROM wishlist WHERE user_id = $1", [userId]);
+  await q("DELETE FROM messages WHERE user_id = $1", [userId]);
+  await q(
+    `UPDATE users SET phone = 'deleted:' || id || ':' || floor(random() * 1e9)::text,
+       name = NULL, role = NULL, location = NULL, bio = NULL, skills = NULL, offers = NULL,
+       needs = NULL, earn_with = NULL, area = NULL, availability = NULL,
+       monthly_budget_cents = NULL, opted_out = 1
+     WHERE id = $1`,
+    [userId]
+  );
+}
+
 // ---------- Shopify partner catalog ----------
 
 export interface PartnerHit {
