@@ -657,6 +657,22 @@ export async function getMerchant(shopDomain: string): Promise<{ access_token: s
   ))[0];
 }
 
+export async function partnerStats(
+  shopDomain: string
+): Promise<{ variants: number; products: number; last_update: string | null }> {
+  const rows = await q<{ variants: string; products: string; last_update: string | null }>(
+    `SELECT count(*)::text AS variants, count(DISTINCT product_id)::text AS products,
+            to_char(max(updated_at) AT TIME ZONE 'UTC', 'Mon DD, HH24:MI UTC') AS last_update
+     FROM partner_products WHERE shop_domain = $1`,
+    [shopDomain]
+  );
+  return {
+    variants: Number(rows[0]?.variants ?? 0),
+    products: Number(rows[0]?.products ?? 0),
+    last_update: rows[0]?.last_update ?? null,
+  };
+}
+
 export async function removeMerchant(shopDomain: string): Promise<void> {
   await q("DELETE FROM merchants WHERE shop_domain = $1", [shopDomain]); // products cascade
 }
