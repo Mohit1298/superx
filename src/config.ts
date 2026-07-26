@@ -7,7 +7,7 @@ try {
 
 export const config = {
   model: process.env.ANTHROPIC_MODEL ?? "claude-opus-4-8",
-  agentName: process.env.AGENT_NAME ?? "Super",
+  agentName: process.env.AGENT_NAME ?? "Shoppy",
   databaseUrl: process.env.DATABASE_URL ?? "",
   // Abuse/cost guardrail: max inbound messages per member per rolling 24h.
   maxUserMessagesPerDay: Number(process.env.MAX_USER_MSGS_PER_DAY ?? 50),
