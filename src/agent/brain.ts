@@ -12,6 +12,24 @@ function getClient(): Anthropic {
   return _client;
 }
 
+// US storefronts whose USD prices masquerade as Canadian in search results.
+// Blocking at the tool level beats asking the model to be careful.
+const US_STORE_DOMAINS = [
+  "walmart.com",
+  "bestbuy.com",
+  "target.com",
+  "costco.com",
+  "amazon.com",
+  "homedepot.com",
+  "lowes.com",
+  "ebay.com",
+  "samsclub.com",
+  "newegg.com",
+  "bhphotovideo.com",
+  "kohls.com",
+  "macys.com",
+];
+
 const OPT_OUT = new Set(["stop", "unsubscribe", "opt out", "optout"]);
 const OPT_IN = new Set(["start", "unstop", "opt in", "optin"]);
 
@@ -104,9 +122,14 @@ export async function handleIncomingMessage(
         // opening links the member forwarded.
         // Generous per-turn budget: a 3-retailer head-to-head burns ~6-8
         // searches. The real cost guardrail is the per-user daily message cap.
-        { type: "web_search_20260209", name: "web_search", max_uses: 12 },
-        { type: "web_fetch_20260209", name: "web_fetch", max_uses: 6 },
+        // US storefronts are structurally blocked: their USD prices kept
+        // bleeding into CAD verdicts ($398 walmart.com ≠ walmart.ca).
+        // Container-free tool generations: the 20260209 versions require
+        // container_id plumbing on pause_turn continuations we don't do.
+        { type: "web_search_20250305", name: "web_search", max_uses: 12, blocked_domains: US_STORE_DOMAINS },
+        { type: "web_fetch_20250910", name: "web_fetch", max_uses: 6, blocked_domains: US_STORE_DOMAINS },
       ],
+      betas: ["web-fetch-2025-09-10"],
       max_iterations: 10,
     });
 

@@ -73,7 +73,7 @@ async function checkItemsForUser(items: WishlistItem[]): Promise<CheckResult[]> 
     max_tokens: 1500,
     system: CHECKER_PROMPT,
     messages,
-    tools: [{ type: "web_search_20250305", name: "web_search", max_uses: Math.min(items.length * 2, 8) }],
+    tools: [{ type: "web_search_20250305", name: "web_search", max_uses: Math.min(items.length * 2, 8), blocked_domains: ["walmart.com","bestbuy.com","target.com","costco.com","amazon.com","homedepot.com","lowes.com","ebay.com","samsclub.com","newegg.com"] }],
   });
 
   // Server-tool loops can pause; continue up to twice.
@@ -84,7 +84,7 @@ async function checkItemsForUser(items: WishlistItem[]): Promise<CheckResult[]> 
       max_tokens: 1500,
       system: CHECKER_PROMPT,
       messages,
-      tools: [{ type: "web_search_20250305", name: "web_search", max_uses: Math.min(items.length * 2, 8) }],
+      tools: [{ type: "web_search_20250305", name: "web_search", max_uses: Math.min(items.length * 2, 8), blocked_domains: ["walmart.com","bestbuy.com","target.com","costco.com","amazon.com","homedepot.com","lowes.com","ebay.com","samsclub.com","newegg.com"] }],
     });
   }
 
