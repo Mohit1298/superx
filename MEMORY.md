@@ -1,6 +1,6 @@
 # Memory — mohit
 
-> Generated: 2026-07-22 22:26:49  
+> Generated: 2026-07-24 21:21:44  
 > Total memories: **325**  
 > Breakdown: instruction: 25, fact: 25, decision: 25, goal: 25, commitment: 25, preference: 25, relationship: 25, context: 25, event: 25, learning: 25, observation: 25, artifact: 25, error: 25
 
@@ -64,6 +64,12 @@ User corrected (2026-07-19): on US job applications, answer NO to 'will you requ
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:54:51*
 
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
 ### Deepgram Software Engineering Internship (Fall 202...
 
 Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUBMITTED 2026-07-19 (Mohit completed the final upload/submit himself after Claude filled the form). Ashby posting dc8693b5-72ce-4ca3-ab15-9c8434d35da1.
@@ -118,6 +124,18 @@ Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
 
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### Mohit's goal: start a tech/data startup today that...
 
 Mohit's goal: start a tech/data startup today that can grow into a billion-dollar company over 10 years, structured so he benefits (revenue/value) at every stage rather than only at exit. Stated 2026-07-13.
@@ -130,35 +148,17 @@ Job-application answers for Mohit (stated 2026-07-19): gender male; race/ethnici
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:48:16*
 
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### Mohit's stated concerns about SuperX viability (20...
 
 Mohit's stated concerns about SuperX viability (2026-07-19): (1) people misusing the network, (2) token costs exceeding returns. Assessment given: both are solvable/secondary; the decisive risk is marketplace liquidity (fill rate in one dense community). Token math: ~$1/completed gig unoptimized Opus vs ~$5.80 take on a $77 gig at 7.5%; Haiku triage + caching + per-user caps get cost to low single-digit % of GMV. Misuse: identity-bound membership + code-enforced consent + caps + community seeding cover most vectors; in-person safety is the tail risk to respect; hardening idea noted = strip full names from search_network results (jailbreak leak vector). Suggested kill/continue criterion: 8 weeks in one community, fill rate >=70% and repeat usage or thesis is wrong.
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-22T00:44:52*
-
-### Mohit's current resume file: /Users/mohitbendale/D...
-
-Mohit's current resume file: /Users/mohitbendale/Documents/Resume.pdf (last updated Jan 2026, modified May 30 2026). Note: resume states UofT Sept 2023 - May 2027 grad, but Mohit has instructed to answer June 2028 as expected graduation on applications. Resume email: mohit.bendale@mail.utoronto.ca. Prior internships: Resultant Technologies (SWE, 2024), BC Instruments (PM, 2025).
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T13:10:21*
-
-### Mohit's constraints for any Shopify (or similar) d...
-
-Mohit's constraints for any Shopify (or similar) deal around SuperX/AgentRank (stated 2026-07-19): he wants to (1) complete his UofT education, (2) intern at DIFFERENT companies before graduation (so no multi-term exclusivity), (3) keep building his startup. Advice given — best-fit package to aim for: term-scoped paid internship (fall 2026 via Scott Rollo referral path) + WRITTEN IP carve-out listing SuperX+AgentRank as excluded prior inventions + Shopify partner-track support for the product (early agentic-commerce API access, app review fast-track, merchant pilot cohort) as a partner agreement separate from employment + optionally a clean strategic SAFE (no ROFR, no exclusivity, no board seat). Red lines: never sign broad invention-assignment without exclusion schedule; no exclusivity on his time or the product's platform; no right-of-first-refusal on acquisition; don't sell IP pre-traction; don't take Shopify as sole investor. Sequence: internship first (urgent), product stays independent.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T16:51:13*
-
-### Proposed from-scratch startup idea for Mohit (2026...
-
-Proposed from-scratch startup idea for Mohit (2026-07-13, awaiting his validation): AI governance/assurance platform ('Vanta for AI'). Phase 1: self-serve EU AI Act / ISO 42001 readiness tool. Phase 2: continuous compliance with automated evidence-collection agents. Phase 3: runtime assurance (production AI monitoring, incident registry). Phase 4: cross-deployment risk data -> AI risk scores + insurance underwriting partnerships. Phase 5: certification/trust layer for the AI economy. Comps: Vanta $2.45B, Drata $2B. Rationale: regulation-forced budget, solo-founder-friendly GTM, uses his agent-building skills without depending on Rivera/CUA code.
-
-*Confidence: 0.75 | Status: active | Created: 2026-07-13T14:58:11*
-
-### SuperX growth strategy constraint (2026-07-19): Mo...
-
-SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
 
 ---
 
@@ -214,11 +214,23 @@ Created ML/AI-tailored resume variant 2026-07-22: /Users/mohitbendale/Downloads/
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-22T04:13:22*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
 ### Job-application answers for Mohit (stated 2026-07-...
 
 Job-application answers for Mohit (stated 2026-07-19): gender male; race/ethnicity South Asian (US EEO category: Asian); no disability; not a protected veteran; LinkedIn https://www.linkedin.com/in/mohit-bendale-a366b01a6/; current location Toronto, Canada. Also: Canadian requiring US visa sponsorship. Email mohit.bendale@mail.utoronto.ca, phone 365-777-3848, UofT HBSc Applied Statistics & CS, Sept 2023 - May 2028.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:48:16*
+
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
 
 ### For CSC207 homework git work: no mention of Claude...
 
@@ -243,6 +255,24 @@ SuperX Phase 0 implemented 2026-07-19 in ~/Desktop/SuperX: TypeScript + Express 
 CORRECTION (2026-07-19): Mohit's CURRENT resume file is /Users/mohitbendale/Downloads/Resume_Fin.pdf (user corrected; supersedes /Users/mohitbendale/Documents/Resume.pdf). Always use Resume_Fin.pdf for job applications.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:11:26*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
 
 ### Mohit's stated concerns about SuperX viability (20...
 
@@ -286,36 +316,6 @@ Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUB
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:49:17*
 
-### SuperX commerce layer idea from Mohit (2026-07-19)...
-
-SuperX commerce layer idea from Mohit (2026-07-19): the same WhatsApp agent doubles as a personal shopping assistant — members save someday-wishlist items + budget; agent watches merchant deals and recommends. Merchant side = a Shopify app merchants install (scoped catalog/discount read per store) getting (a) wishlist-matched sales channel paid per conversion and (b) AGGREGATE demand intelligence dashboards. Direct AgentRank synergy (demand side of his agentic-commerce thesis; Shopify network = distribution). Design constraints established: never take custody of banking credentials (self-declared budget v0, read-only Flinks/Plaid later, only derived signals stored); agent recommends but never auto-purchases; merchants get aggregates only, never individual member data (PIPEDA). Synergy: purchases from local merchants generate delivery gigs for the network. Implemented 2026-07-19: wishlist table + add/update_wishlist_item tools + self-declared monthly_budget on profile + persona WISHLIST loop with no-invented-deals rule; smoke test green. Shopify app itself deliberately deferred: one surface at a time as solo founder.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T02:01:45*
-
-### Cloudflare Software Engineer Intern (Fall 2026, Au...
-
-Cloudflare Software Engineer Intern (Fall 2026, Austin TX) application submitted by Mohit himself 2026-07-19 (gh_jid 8052785) after Claude pre-filled most of the form. Answers used: sponsorship No, enrolled Yes, grad June 2028, Bachelor's, available upon graduation, 12-week Yes, Austin office Yes, interests Full-stack + Backend/Systems.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:11*
-
-### User instruction (2026-07-19): when hunting fall 2...
-
-User instruction (2026-07-19): when hunting fall 2026 internships, include CANADA openings (Toronto-based, UofT student — no work-auth friction), not just USA.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:07:10*
-
-### User corrected (2026-07-19): on US job application...
-
-User corrected (2026-07-19): on US job applications, answer NO to 'will you require visa/immigration sponsorship' questions. (Canadians commonly use J-1/TN routes that don't require employer petition sponsorship.) Supersedes the earlier assumption of answering Yes.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:54:51*
-
-### SuperX growth strategy constraint (2026-07-19): Mo...
-
-SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
-
 ---
 
 ## Decisions
@@ -334,6 +334,12 @@ Startup plan agreed direction (2026-07-13): build on Rivera (memory engine) + CU
 
 *Confidence: 0.9 | Status: active | Created: 2026-07-13T14:53:42*
 
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
 ### GBrain taxonomy (stated by Mohit 2026-07-13): ther...
 
 GBrain taxonomy (stated by Mohit 2026-07-13): there are 4 types of GBrain — 1) Gstack GBrain, 2) Personal GBrain, 3) Company GBrain, 4) GBrain as SaaS. First mention of GBrain/Gstack; no further definition given yet — likely related to his startup/memory-product thinking.
@@ -345,6 +351,12 @@ GBrain taxonomy (stated by Mohit 2026-07-13): there are 4 types of GBrain — 1)
 SuperX Phase 0 implemented 2026-07-19 in ~/Desktop/SuperX: TypeScript + Express webhook server + node:sqlite (zero native deps) + Claude claude-opus-4-8 via @anthropic-ai/sdk beta tool runner (betaTool raw JSON schema). Agent 'Sam' has 8 tools (update_profile, remember, create_task, complete_task, search_network, propose_intro, accept_intro, decline_intro). Double-opt-in intro state machine (proposed→accepted/declined→connected) enforced in code, not prompt; STOP/START opt-out hard-coded before the LLM sees messages. CLI simulator (npm run cli) demos multi-party intros without Meta setup. Verified: tsc clean, smoke test passes, webhook verify handshake works. Live LLM test still needs ANTHROPIC_API_KEY (none in env, no ant profile).
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:18*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
 
 ### SuperX commerce layer idea from Mohit (2026-07-19)...
 
@@ -400,6 +412,18 @@ Created ML/AI-tailored resume variant 2026-07-22: /Users/mohitbendale/Downloads/
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-22T04:13:22*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### User corrected: his 10-year billion-dollar startup...
 
 User corrected: his 10-year billion-dollar startup plan must NOT be built on Rivera or existing CUA assets. He wants a brand-new from-scratch idea targeting a market (tech/data). The 2026-07-13 'startup plan agreed direction' memory (Rivera-based 5-phase plan) is superseded as his startup plan — Rivera remains just a side project.
@@ -424,6 +448,12 @@ Greenhouse job forms: the 'Country' combobox beside Phone is the phone COUNTRY C
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T14:10:57*
 
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### Job-application answers for Mohit (stated 2026-07-...
 
 Job-application answers for Mohit (stated 2026-07-19): gender male; race/ethnicity South Asian (US EEO category: Asian); no disability; not a protected veteran; LinkedIn https://www.linkedin.com/in/mohit-bendale-a366b01a6/; current location Toronto, Canada. Also: Canadian requiring US visa sponsorship. Email mohit.bendale@mail.utoronto.ca, phone 365-777-3848, UofT HBSc Applied Statistics & CS, Sept 2023 - May 2028.
@@ -441,36 +471,6 @@ User corrected (2026-07-19): on US job applications, answer NO to 'will you requ
 SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
-
-### Deepgram Software Engineering Internship (Fall 202...
-
-Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUBMITTED 2026-07-19 (Mohit completed the final upload/submit himself after Claude filled the form). Ashby posting dc8693b5-72ce-4ca3-ab15-9c8434d35da1.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:49:17*
-
-### User instruction (2026-07-19): when hunting fall 2...
-
-User instruction (2026-07-19): when hunting fall 2026 internships, include CANADA openings (Toronto-based, UofT student — no work-auth friction), not just USA.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:07:10*
-
-### Cloudflare Software Engineer Intern (Fall 2026, Au...
-
-Cloudflare Software Engineer Intern (Fall 2026, Austin TX) application submitted by Mohit himself 2026-07-19 (gh_jid 8052785) after Claude pre-filled most of the form. Answers used: sponsorship No, enrolled Yes, grad June 2028, Bachelor's, available upon graduation, 12-week Yes, Austin office Yes, interests Full-stack + Backend/Systems.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:11*
-
-### Mohit is enrolled in the Venture for Canada (VFC) ...
-
-Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026-07-19): Canadian employers with UNDER 500 employees can receive a wage subsidy for hiring him. Strategy: prioritize small Canadian companies (<500 staff) for fall 2026 internships and mention VFC subsidy eligibility in outreach/applications.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
-
-### CORRECTION (2026-07-19): Mohit's CURRENT resume fi...
-
-CORRECTION (2026-07-19): Mohit's CURRENT resume file is /Users/mohitbendale/Downloads/Resume_Fin.pdf (user corrected; supersedes /Users/mohitbendale/Documents/Resume.pdf). Always use Resume_Fin.pdf for job applications.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:11:26*
 
 ---
 
@@ -508,17 +508,41 @@ Mohit's Agentrank LinkedIn post has a specific strategic goal: get Scott (strong
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T15:43:31*
 
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
 ### SuperX Phase 0 implemented 2026-07-19 in ~/Desktop...
 
 SuperX Phase 0 implemented 2026-07-19 in ~/Desktop/SuperX: TypeScript + Express webhook server + node:sqlite (zero native deps) + Claude claude-opus-4-8 via @anthropic-ai/sdk beta tool runner (betaTool raw JSON schema). Agent 'Sam' has 8 tools (update_profile, remember, create_task, complete_task, search_network, propose_intro, accept_intro, decline_intro). Double-opt-in intro state machine (proposed→accepted/declined→connected) enforced in code, not prompt; STOP/START opt-out hard-coded before the LLM sees messages. CLI simulator (npm run cli) demos multi-party intros without Meta setup. Verified: tsc clean, smoke test passes, webhook verify handshake works. Live LLM test still needs ANTHROPIC_API_KEY (none in env, no ant profile).
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:18*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
 ### For CSC207 homework git work: no mention of Claude...
 
 For CSC207 homework git work: no mention of Claude/AI anywhere except the required ai.txt document — omit Co-Authored-By: Claude commit trailers, omit 'Generated with Claude Code' from PR bodies, and no AI mentions in issues/comments/code.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-17T18:19:38*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
 
 ### Job application forms (Greenhouse etc.): the 'Coun...
 
@@ -586,6 +610,12 @@ Mohit asked (2026-07-19) about the cost to build a Boardy-like AI super-connecto
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:12:35*
 
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### New project kicked off 2026-07-19: SuperX (workspa...
 
 New project kicked off 2026-07-19: SuperX (workspace ~/Desktop/SuperX) — an AI superconnector agent living on WhatsApp, similar to Boardy but chat-first instead of voice-first. Vision: users give it tasks, it finds the right person in the network at the right time (double-opt-in intros); long-term it becomes a demand-aggregation layer for rides/food/stays/parking (agentic commerce, ties to his AgentRank work). This appears to be a candidate for his from-scratch billion-dollar startup idea.
@@ -597,36 +627,6 @@ New project kicked off 2026-07-19: SuperX (workspace ~/Desktop/SuperX) — an AI
 User corrected (2026-07-19): on job application voluntary disability self-identification questions, answer YES from now on (supersedes earlier 'no disability' answer from the same day).
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:07*
-
-### Mohit is enrolled in the Venture for Canada (VFC) ...
-
-Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026-07-19): Canadian employers with UNDER 500 employees can receive a wage subsidy for hiring him. Strategy: prioritize small Canadian companies (<500 staff) for fall 2026 internships and mention VFC subsidy eligibility in outreach/applications.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
-
-### User instruction (2026-07-19): when hunting fall 2...
-
-User instruction (2026-07-19): when hunting fall 2026 internships, include CANADA openings (Toronto-based, UofT student — no work-auth friction), not just USA.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:07:10*
-
-### Cloudflare Software Engineer Intern (Fall 2026, Au...
-
-Cloudflare Software Engineer Intern (Fall 2026, Austin TX) application submitted by Mohit himself 2026-07-19 (gh_jid 8052785) after Claude pre-filled most of the form. Answers used: sponsorship No, enrolled Yes, grad June 2028, Bachelor's, available upon graduation, 12-week Yes, Austin office Yes, interests Full-stack + Backend/Systems.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:11*
-
-### Greenhouse job forms: the 'Country' combobox besid...
-
-Greenhouse job forms: the 'Country' combobox beside Phone is the phone COUNTRY CODE selector - do not type plain 'Canada' via form_input; open its flyout and select the 'Canada (+1)' option (or type and click the dropdown option), otherwise the value does not register.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T14:10:57*
-
-### Mohit's constraints for any Shopify (or similar) d...
-
-Mohit's constraints for any Shopify (or similar) deal around SuperX/AgentRank (stated 2026-07-19): he wants to (1) complete his UofT education, (2) intern at DIFFERENT companies before graduation (so no multi-term exclusivity), (3) keep building his startup. Advice given — best-fit package to aim for: term-scoped paid internship (fall 2026 via Scott Rollo referral path) + WRITTEN IP carve-out listing SuperX+AgentRank as excluded prior inventions + Shopify partner-track support for the product (early agentic-commerce API access, app review fast-track, merchant pilot cohort) as a partner agreement separate from employment + optionally a clean strategic SAFE (no ROFR, no exclusivity, no board seat). Red lines: never sign broad invention-assignment without exclusion schedule; no exclusivity on his time or the product's platform; no right-of-first-refusal on acquisition; don't sell IP pre-traction; don't take Shopify as sole investor. Sequence: internship first (urgent), product stays independent.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T16:51:13*
 
 ---
 
@@ -676,6 +676,18 @@ For CSC207 homework git work: no mention of Claude/AI anywhere except the requir
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-17T18:19:38*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### Deepgram Software Engineering Internship (Fall 202...
 
 Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUBMITTED 2026-07-19 (Mohit completed the final upload/submit himself after Claude filled the form). Ashby posting dc8693b5-72ce-4ca3-ab15-9c8434d35da1.
@@ -693,6 +705,18 @@ Created ML/AI-tailored resume variant 2026-07-22: /Users/mohitbendale/Downloads/
 Proposed from-scratch startup idea for Mohit (2026-07-13, awaiting his validation): AI governance/assurance platform ('Vanta for AI'). Phase 1: self-serve EU AI Act / ISO 42001 readiness tool. Phase 2: continuous compliance with automated evidence-collection agents. Phase 3: runtime assurance (production AI monitoring, incident registry). Phase 4: cross-deployment risk data -> AI risk scores + insurance underwriting partnerships. Phase 5: certification/trust layer for the AI economy. Comps: Vanta $2.45B, Drata $2B. Rationale: regulation-forced budget, solo-founder-friendly GTM, uses his agent-building skills without depending on Rivera/CUA code.
 
 *Confidence: 0.75 | Status: active | Created: 2026-07-13T14:58:11*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
 
 ### User corrected: his 10-year billion-dollar startup...
 
@@ -724,6 +748,12 @@ Mohit asked (2026-07-19) about the cost to build a Boardy-like AI super-connecto
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:12:35*
 
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### SuperX commerce layer idea from Mohit (2026-07-19)...
 
 SuperX commerce layer idea from Mohit (2026-07-19): the same WhatsApp agent doubles as a personal shopping assistant — members save someday-wishlist items + budget; agent watches merchant deals and recommends. Merchant side = a Shopify app merchants install (scoped catalog/discount read per store) getting (a) wishlist-matched sales channel paid per conversion and (b) AGGREGATE demand intelligence dashboards. Direct AgentRank synergy (demand side of his agentic-commerce thesis; Shopify network = distribution). Design constraints established: never take custody of banking credentials (self-declared budget v0, read-only Flinks/Plaid later, only derived signals stored); agent recommends but never auto-purchases; merchants get aggregates only, never individual member data (PIPEDA). Synergy: purchases from local merchants generate delivery gigs for the network. Implemented 2026-07-19: wishlist table + add/update_wishlist_item tools + self-declared monthly_budget on profile + persona WISHLIST loop with no-invented-deals rule; smoke test green. Shopify app itself deliberately deferred: one surface at a time as solo founder.
@@ -753,36 +783,6 @@ Mohit's Agentrank LinkedIn post has a specific strategic goal: get Scott (strong
 CORRECTION (2026-07-19): Mohit's CURRENT resume file is /Users/mohitbendale/Downloads/Resume_Fin.pdf (user corrected; supersedes /Users/mohitbendale/Documents/Resume.pdf). Always use Resume_Fin.pdf for job applications.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:11:26*
-
-### Mohit is enrolled in the Venture for Canada (VFC) ...
-
-Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026-07-19): Canadian employers with UNDER 500 employees can receive a wage subsidy for hiring him. Strategy: prioritize small Canadian companies (<500 staff) for fall 2026 internships and mention VFC subsidy eligibility in outreach/applications.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
-
-### New project kicked off 2026-07-19: SuperX (workspa...
-
-New project kicked off 2026-07-19: SuperX (workspace ~/Desktop/SuperX) — an AI superconnector agent living on WhatsApp, similar to Boardy but chat-first instead of voice-first. Vision: users give it tasks, it finds the right person in the network at the right time (double-opt-in intros); long-term it becomes a demand-aggregation layer for rides/food/stays/parking (agentic commerce, ties to his AgentRank work). This appears to be a candidate for his from-scratch billion-dollar startup idea.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T19:39:53*
-
-### Job-application answers for Mohit (stated 2026-07-...
-
-Job-application answers for Mohit (stated 2026-07-19): gender male; race/ethnicity South Asian (US EEO category: Asian); no disability; not a protected veteran; LinkedIn https://www.linkedin.com/in/mohit-bendale-a366b01a6/; current location Toronto, Canada. Also: Canadian requiring US visa sponsorship. Email mohit.bendale@mail.utoronto.ca, phone 365-777-3848, UofT HBSc Applied Statistics & CS, Sept 2023 - May 2028.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:48:16*
-
-### SuperX growth strategy constraint (2026-07-19): Mo...
-
-SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
-
-### URGENT (2026-07-19): Mohit says he has ~2 days to ...
-
-URGENT (2026-07-19): Mohit says he has ~2 days to land a fall 2026 internship or he gets none. Shopify official fall 2026 application closed May 7 — only path there is Scott Rollo referral/backdoor. Plan: 48h application blitz on still-open fall roles (Notion, NVIDIA, Amazon Robotics, SpaceX, rolling defense) + direct startup outreach using Agentrank/Rivera/CUA as proof of work.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:28:47*
 
 ---
 
@@ -838,6 +838,18 @@ Greenhouse job forms: the 'Country' combobox beside Phone is the phone COUNTRY C
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T14:10:57*
 
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
 ### Created ML/AI-tailored resume variant 2026-07-22: ...
 
 Created ML/AI-tailored resume variant 2026-07-22: /Users/mohitbendale/Downloads/Resume_ML_AI.pdf (LaTeX source Resume_ML_AI.tex alongside, compiled with pdflatex; same Computer Modern style as Resume_Fin.pdf). Use for ML/AI internship applications; Resume_Fin.pdf remains the general SWE resume. Changes vs Resume_Fin: added 'AI & Machine Learning Projects' section (Rivera memory engine w/ github.com/Mohit1298/rivera-cli link, SuperX WhatsApp agent, TypeSmart), added AgentRank Shopify Builder Sundays demo under 'Competitions & Showcases', added AI & ML skills line (LLM agents/tool use, RAG, embeddings, statistical forecasting), merged the two UTMIST roles into one entry, condensed Rotman to one bullet. CUT: AI Home Tour Generator project, CSSU Marketing & Events role, Unity/Blender skills. Note: Mohit1298/rivera repo is PRIVATE (404) — only rivera-cli is public, so only it is linked.
@@ -850,11 +862,29 @@ CORRECTION (2026-07-19): Mohit's CURRENT resume file is /Users/mohitbendale/Down
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:11:26*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### User corrected the SuperX vision (2026-07-19): it ...
 
 User corrected the SuperX vision (2026-07-19): it is NOT primarily a Boardy-style intro superconnector. Core model = peer-to-peer gig fulfillment economy: people join the WhatsApp agent TO EARN money; every member is both worker and customer; e.g. his sister posts a grocery request, the agent dispatches HIM (nearby, willing), she pays him (fee + fronted grocery receipt), agent coordinates and settles the money. At 1M members the network itself replaces Uber Eats/DoorDash/TaskRabbit fleets. Intros remain a secondary capability. Money design he agreed to implicitly via implementation: platform never holds funds — v0 agent-tracked ledger + direct Interac e-Transfer between members with both-side confirmation (no MSB licensing), v1 Stripe Connect escrow with 5-10% application fee. Implemented 2026-07-19: full gig state machine (offered→accepted→delivered→confirmed→settled), expense reimbursement from receipts, ledger in cents, dispatch fatigue caps, refusal policy (no alcohol/rx/rides-for-money). Smoke test passes the exact sister/brother scenario ( fee + $62.30 receipt = $77.30 settled).
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T20:10:13*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
 
 ### User corrected (2026-07-19): on US job application...
 
@@ -868,17 +898,17 @@ SuperX commerce layer idea from Mohit (2026-07-19): the same WhatsApp agent doub
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-22T02:01:45*
 
-### Mohit's stated concerns about SuperX viability (20...
-
-Mohit's stated concerns about SuperX viability (2026-07-19): (1) people misusing the network, (2) token costs exceeding returns. Assessment given: both are solvable/secondary; the decisive risk is marketplace liquidity (fill rate in one dense community). Token math: ~$1/completed gig unoptimized Opus vs ~$5.80 take on a $77 gig at 7.5%; Haiku triage + caching + per-user caps get cost to low single-digit % of GMV. Misuse: identity-bound membership + code-enforced consent + caps + community seeding cover most vectors; in-person safety is the tail risk to respect; hardening idea noted = strip full names from search_network results (jailbreak leak vector). Suggested kill/continue criterion: 8 weeks in one community, fill rate >=70% and repeat usage or thesis is wrong.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T00:44:52*
-
 ### Cloudflare Software Engineer Intern (Fall 2026, Au...
 
 Cloudflare Software Engineer Intern (Fall 2026, Austin TX) application submitted by Mohit himself 2026-07-19 (gh_jid 8052785) after Claude pre-filled most of the form. Answers used: sponsorship No, enrolled Yes, grad June 2028, Bachelor's, available upon graduation, 12-week Yes, Austin office Yes, interests Full-stack + Backend/Systems.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:11*
+
+### Mohit's stated concerns about SuperX viability (20...
+
+Mohit's stated concerns about SuperX viability (2026-07-19): (1) people misusing the network, (2) token costs exceeding returns. Assessment given: both are solvable/secondary; the decisive risk is marketplace liquidity (fill rate in one dense community). Token math: ~$1/completed gig unoptimized Opus vs ~$5.80 take on a $77 gig at 7.5%; Haiku triage + caching + per-user caps get cost to low single-digit % of GMV. Misuse: identity-bound membership + code-enforced consent + caps + community seeding cover most vectors; in-person safety is the tail risk to respect; hardening idea noted = strip full names from search_network results (jailbreak leak vector). Suggested kill/continue criterion: 8 weeks in one community, fill rate >=70% and repeat usage or thesis is wrong.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-22T00:44:52*
 
 ### Deepgram Software Engineering Internship (Fall 202...
 
@@ -909,36 +939,6 @@ Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026
 Mohit asked (2026-07-19) about the cost to build a Boardy-like AI super-connector service (voice AI that interviews users and makes warm double-opt-in intros). Estimate given: prototype ~$5-10k cash solo, funded MVP $200-500k, Boardy itself raised $3M pre-seed + $8M seed; unit cost ~$2-5 per onboarding call at $0.13-0.31/min voice AI pricing. Possibly related to his GBrain/startup ideation.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:12:35*
-
-### User corrected: his 10-year billion-dollar startup...
-
-User corrected: his 10-year billion-dollar startup plan must NOT be built on Rivera or existing CUA assets. He wants a brand-new from-scratch idea targeting a market (tech/data). The 2026-07-13 'startup plan agreed direction' memory (Rivera-based 5-phase plan) is superseded as his startup plan — Rivera remains just a side project.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-13T14:57:42*
-
-### Mohit's current resume file: /Users/mohitbendale/D...
-
-Mohit's current resume file: /Users/mohitbendale/Documents/Resume.pdf (last updated Jan 2026, modified May 30 2026). Note: resume states UofT Sept 2023 - May 2027 grad, but Mohit has instructed to answer June 2028 as expected graduation on applications. Resume email: mohit.bendale@mail.utoronto.ca. Prior internships: Resultant Technologies (SWE, 2024), BC Instruments (PM, 2025).
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T13:10:21*
-
-### Mohit's constraints for any Shopify (or similar) d...
-
-Mohit's constraints for any Shopify (or similar) deal around SuperX/AgentRank (stated 2026-07-19): he wants to (1) complete his UofT education, (2) intern at DIFFERENT companies before graduation (so no multi-term exclusivity), (3) keep building his startup. Advice given — best-fit package to aim for: term-scoped paid internship (fall 2026 via Scott Rollo referral path) + WRITTEN IP carve-out listing SuperX+AgentRank as excluded prior inventions + Shopify partner-track support for the product (early agentic-commerce API access, app review fast-track, merchant pilot cohort) as a partner agreement separate from employment + optionally a clean strategic SAFE (no ROFR, no exclusivity, no board seat). Red lines: never sign broad invention-assignment without exclusion schedule; no exclusivity on his time or the product's platform; no right-of-first-refusal on acquisition; don't sell IP pre-traction; don't take Shopify as sole investor. Sequence: internship first (urgent), product stays independent.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T16:51:13*
-
-### SuperX growth strategy constraint (2026-07-19): Mo...
-
-SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
-
-### Proposed from-scratch startup idea for Mohit (2026...
-
-Proposed from-scratch startup idea for Mohit (2026-07-13, awaiting his validation): AI governance/assurance platform ('Vanta for AI'). Phase 1: self-serve EU AI Act / ISO 42001 readiness tool. Phase 2: continuous compliance with automated evidence-collection agents. Phase 3: runtime assurance (production AI monitoring, incident registry). Phase 4: cross-deployment risk data -> AI risk scores + insurance underwriting partnerships. Phase 5: certification/trust layer for the AI economy. Comps: Vanta $2.45B, Drata $2B. Rationale: regulation-forced budget, solo-founder-friendly GTM, uses his agent-building skills without depending on Rivera/CUA code.
-
-*Confidence: 0.75 | Status: active | Created: 2026-07-13T14:58:11*
 
 ---
 
@@ -976,11 +976,29 @@ Job application forms (Greenhouse etc.): the 'Country' field paired with Phone e
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T14:23:28*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
 ### Scott Rollo (he/him) is Mohit's Shopify connection...
 
 Scott Rollo (he/him) is Mohit's Shopify connection for the internship campaign. They met in person at Shopify Builders Sunday (July 5, 2026). Scott sent event photos via LinkedIn DM on July 12, 2026 with friendly emojis; as of July 19 Mohit had not yet replied — thread needs a warm reply before any Agentrank ask.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T15:46:37*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
 
 ### SuperX commerce layer idea from Mohit (2026-07-19)...
 
@@ -1000,11 +1018,23 @@ SuperX Phase 0 implemented 2026-07-19 in ~/Desktop/SuperX: TypeScript + Express 
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:18*
 
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### Mohit's Agentrank LinkedIn post has a specific str...
 
 Mohit's Agentrank LinkedIn post has a specific strategic goal: get Scott (strong connection at Shopify) to like it AND forward it internally to his team, indirectly positioning Mohit as the obvious intern hire for fall 2026. Post must be written to be forwardable — ecosystem insight framing, not self-promo.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T15:43:31*
+
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
 
 ### CORRECTION (2026-07-19): Mohit's CURRENT resume fi...
 
@@ -1065,36 +1095,6 @@ SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions 
 Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUBMITTED 2026-07-19 (Mohit completed the final upload/submit himself after Claude filled the form). Ashby posting dc8693b5-72ce-4ca3-ab15-9c8434d35da1.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:49:17*
-
-### Mohit's constraints for any Shopify (or similar) d...
-
-Mohit's constraints for any Shopify (or similar) deal around SuperX/AgentRank (stated 2026-07-19): he wants to (1) complete his UofT education, (2) intern at DIFFERENT companies before graduation (so no multi-term exclusivity), (3) keep building his startup. Advice given — best-fit package to aim for: term-scoped paid internship (fall 2026 via Scott Rollo referral path) + WRITTEN IP carve-out listing SuperX+AgentRank as excluded prior inventions + Shopify partner-track support for the product (early agentic-commerce API access, app review fast-track, merchant pilot cohort) as a partner agreement separate from employment + optionally a clean strategic SAFE (no ROFR, no exclusivity, no board seat). Red lines: never sign broad invention-assignment without exclusion schedule; no exclusivity on his time or the product's platform; no right-of-first-refusal on acquisition; don't sell IP pre-traction; don't take Shopify as sole investor. Sequence: internship first (urgent), product stays independent.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T16:51:13*
-
-### Mohit's goal: start a tech/data startup today that...
-
-Mohit's goal: start a tech/data startup today that can grow into a billion-dollar company over 10 years, structured so he benefits (revenue/value) at every stage rather than only at exit. Stated 2026-07-13.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-13T14:50:56*
-
-### Cloudflare Software Engineer Intern (Fall 2026, Au...
-
-Cloudflare Software Engineer Intern (Fall 2026, Austin TX) application submitted by Mohit himself 2026-07-19 (gh_jid 8052785) after Claude pre-filled most of the form. Answers used: sponsorship No, enrolled Yes, grad June 2028, Bachelor's, available upon graduation, 12-week Yes, Austin office Yes, interests Full-stack + Backend/Systems.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:11*
-
-### Mohit's current resume file: /Users/mohitbendale/D...
-
-Mohit's current resume file: /Users/mohitbendale/Documents/Resume.pdf (last updated Jan 2026, modified May 30 2026). Note: resume states UofT Sept 2023 - May 2027 grad, but Mohit has instructed to answer June 2028 as expected graduation on applications. Resume email: mohit.bendale@mail.utoronto.ca. Prior internships: Resultant Technologies (SWE, 2024), BC Instruments (PM, 2025).
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T13:10:21*
-
-### New project kicked off 2026-07-19: SuperX (workspa...
-
-New project kicked off 2026-07-19: SuperX (workspace ~/Desktop/SuperX) — an AI superconnector agent living on WhatsApp, similar to Boardy but chat-first instead of voice-first. Vision: users give it tasks, it finds the right person in the network at the right time (double-opt-in intros); long-term it becomes a demand-aggregation layer for rides/food/stays/parking (agentic commerce, ties to his AgentRank work). This appears to be a candidate for his from-scratch billion-dollar startup idea.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T19:39:53*
 
 ---
 
@@ -1132,6 +1132,12 @@ Mohit's stated concerns about SuperX viability (2026-07-19): (1) people misusing
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-22T00:44:52*
 
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### For CSC207 homework git work: no mention of Claude...
 
 For CSC207 homework git work: no mention of Claude/AI anywhere except the required ai.txt document — omit Co-Authored-By: Claude commit trailers, omit 'Generated with Claude Code' from PR bodies, and no AI mentions in issues/comments/code.
@@ -1144,6 +1150,12 @@ Job application forms (Greenhouse etc.): the 'Country' field paired with Phone e
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T14:23:28*
 
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
 ### User corrected the SuperX vision (2026-07-19): it ...
 
 User corrected the SuperX vision (2026-07-19): it is NOT primarily a Boardy-style intro superconnector. Core model = peer-to-peer gig fulfillment economy: people join the WhatsApp agent TO EARN money; every member is both worker and customer; e.g. his sister posts a grocery request, the agent dispatches HIM (nearby, willing), she pays him (fee + fronted grocery receipt), agent coordinates and settles the money. At 1M members the network itself replaces Uber Eats/DoorDash/TaskRabbit fleets. Intros remain a secondary capability. Money design he agreed to implicitly via implementation: platform never holds funds — v0 agent-tracked ledger + direct Interac e-Transfer between members with both-side confirmation (no MSB licensing), v1 Stripe Connect escrow with 5-10% application fee. Implemented 2026-07-19: full gig state machine (offered→accepted→delivered→confirmed→settled), expense reimbursement from receipts, ledger in cents, dispatch fatigue caps, refusal policy (no alcohol/rx/rides-for-money). Smoke test passes the exact sister/brother scenario ( fee + $62.30 receipt = $77.30 settled).
@@ -1155,6 +1167,24 @@ User corrected the SuperX vision (2026-07-19): it is NOT primarily a Boardy-styl
 Mohit asked (2026-07-19) about the cost to build a Boardy-like AI super-connector service (voice AI that interviews users and makes warm double-opt-in intros). Estimate given: prototype ~$5-10k cash solo, funded MVP $200-500k, Boardy itself raised $3M pre-seed + $8M seed; unit cost ~$2-5 per onboarding call at $0.13-0.31/min voice AI pricing. Possibly related to his GBrain/startup ideation.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:12:35*
+
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
+### SuperX WENT LIVE on real WhatsApp 2026-07-23: test...
+
+SuperX WENT LIVE on real WhatsApp 2026-07-23: test number +1 555-187-9714, Meta app 'SuperX' (id 1055344287196499), WABA 1783128786018863, webhook via ngrok on Mohit's laptop. Agent 'Sam' replying in ~4s. Key debugging learning: Meta's new dev console attaches its internal 'WA DevX Webhook Events 1P App' to the WABA but does NOT subscribe YOUR app — webhook URL verification succeeds yet zero message deliveries. Fix: POST /{waba_id}/subscribed_apps with the app token. Ops caveats: temp token expires ~24h (re-copy from API Setup); ngrok URL changes on restart (re-do webhook config); server+tunnel currently running from Claude Code session — standalone relaunch is 'npm start' + 'ngrok http 3000'.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:03:19*
 
 ### Greenhouse job forms: the 'Country' combobox besid...
 
@@ -1186,6 +1216,12 @@ CORRECTION (2026-07-19): Mohit's CURRENT resume file is /Users/mohitbendale/Down
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:11:26*
 
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### User corrected (2026-07-19): on job application vo...
 
 User corrected (2026-07-19): on job application voluntary disability self-identification questions, answer YES from now on (supersedes earlier 'no disability' answer from the same day).
@@ -1216,42 +1252,6 @@ Major update: Mohit DEMOED AgentRank live at Shopify Builder Sundays Toronto (~J
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T15:51:44*
 
-### User instruction (2026-07-19): when hunting fall 2...
-
-User instruction (2026-07-19): when hunting fall 2026 internships, include CANADA openings (Toronto-based, UofT student — no work-auth friction), not just USA.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:07:10*
-
-### Mohit is enrolled in the Venture for Canada (VFC) ...
-
-Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026-07-19): Canadian employers with UNDER 500 employees can receive a wage subsidy for hiring him. Strategy: prioritize small Canadian companies (<500 staff) for fall 2026 internships and mention VFC subsidy eligibility in outreach/applications.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
-
-### Proposed from-scratch startup idea for Mohit (2026...
-
-Proposed from-scratch startup idea for Mohit (2026-07-13, awaiting his validation): AI governance/assurance platform ('Vanta for AI'). Phase 1: self-serve EU AI Act / ISO 42001 readiness tool. Phase 2: continuous compliance with automated evidence-collection agents. Phase 3: runtime assurance (production AI monitoring, incident registry). Phase 4: cross-deployment risk data -> AI risk scores + insurance underwriting partnerships. Phase 5: certification/trust layer for the AI economy. Comps: Vanta $2.45B, Drata $2B. Rationale: regulation-forced budget, solo-founder-friendly GTM, uses his agent-building skills without depending on Rivera/CUA code.
-
-*Confidence: 0.75 | Status: active | Created: 2026-07-13T14:58:11*
-
-### Job-application answers for Mohit (stated 2026-07-...
-
-Job-application answers for Mohit (stated 2026-07-19): gender male; race/ethnicity South Asian (US EEO category: Asian); no disability; not a protected veteran; LinkedIn https://www.linkedin.com/in/mohit-bendale-a366b01a6/; current location Toronto, Canada. Also: Canadian requiring US visa sponsorship. Email mohit.bendale@mail.utoronto.ca, phone 365-777-3848, UofT HBSc Applied Statistics & CS, Sept 2023 - May 2028.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:48:16*
-
-### Cloudflare Software Engineer Intern (Fall 2026, Au...
-
-Cloudflare Software Engineer Intern (Fall 2026, Austin TX) application submitted by Mohit himself 2026-07-19 (gh_jid 8052785) after Claude pre-filled most of the form. Answers used: sponsorship No, enrolled Yes, grad June 2028, Bachelor's, available upon graduation, 12-week Yes, Austin office Yes, interests Full-stack + Backend/Systems.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:11*
-
-### Mohit's current resume file: /Users/mohitbendale/D...
-
-Mohit's current resume file: /Users/mohitbendale/Documents/Resume.pdf (last updated Jan 2026, modified May 30 2026). Note: resume states UofT Sept 2023 - May 2027 grad, but Mohit has instructed to answer June 2028 as expected graduation on applications. Resume email: mohit.bendale@mail.utoronto.ca. Prior internships: Resultant Technologies (SWE, 2024), BC Instruments (PM, 2025).
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T13:10:21*
-
 ---
 
 ## Events
@@ -1270,6 +1270,12 @@ GBrain taxonomy (stated by Mohit 2026-07-13): there are 4 types of GBrain — 1)
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-14T00:11:38*
 
+### SuperX WENT LIVE on real WhatsApp 2026-07-23: test...
+
+SuperX WENT LIVE on real WhatsApp 2026-07-23: test number +1 555-187-9714, Meta app 'SuperX' (id 1055344287196499), WABA 1783128786018863, webhook via ngrok on Mohit's laptop. Agent 'Sam' replying in ~4s. Key debugging learning: Meta's new dev console attaches its internal 'WA DevX Webhook Events 1P App' to the WABA but does NOT subscribe YOUR app — webhook URL verification succeeds yet zero message deliveries. Fix: POST /{waba_id}/subscribed_apps with the app token. Ops caveats: temp token expires ~24h (re-copy from API Setup); ngrok URL changes on restart (re-do webhook config); server+tunnel currently running from Claude Code session — standalone relaunch is 'npm start' + 'ngrok http 3000'.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:03:19*
+
 ### Startup plan agreed direction (2026-07-13): build ...
 
 Startup plan agreed direction (2026-07-13): build on Rivera (memory engine) + CUA (computer-use) assets. Phase 1 (yr 0-1): launch Rivera publicly, open-source CLI + paid cloud, wedge = temporal recall. Phase 2 (yr 1-3): memory API for agent builders, $1-3M ARR. Phase 3 (yr 3-5): memory-backed computer-use agents as 'teach it once' enterprise automation (RPA replacement). Phase 4 (yr 5-7): corrected workflow traces as data moat, fine-tuned vertical agents. Phase 5 (yr 7-10): system of record for organizational processes, $100M+ ARR. Design principle: each phase independently profitable so Mohit benefits at every stage.
@@ -1282,11 +1288,29 @@ SuperX Phase 0 implemented 2026-07-19 in ~/Desktop/SuperX: TypeScript + Express 
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:18*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
 ### Deepgram Software Engineering Internship (Fall 202...
 
 Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUBMITTED 2026-07-19 (Mohit completed the final upload/submit himself after Claude filled the form). Ashby posting dc8693b5-72ce-4ca3-ab15-9c8434d35da1.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:49:17*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
 
 ### Cloudflare Software Engineer Intern (Fall 2026, Au...
 
@@ -1312,11 +1336,23 @@ User corrected the SuperX vision (2026-07-19): it is NOT primarily a Boardy-styl
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T20:10:13*
 
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
 ### Created ML/AI-tailored resume variant 2026-07-22: ...
 
 Created ML/AI-tailored resume variant 2026-07-22: /Users/mohitbendale/Downloads/Resume_ML_AI.pdf (LaTeX source Resume_ML_AI.tex alongside, compiled with pdflatex; same Computer Modern style as Resume_Fin.pdf). Use for ML/AI internship applications; Resume_Fin.pdf remains the general SWE resume. Changes vs Resume_Fin: added 'AI & Machine Learning Projects' section (Rivera memory engine w/ github.com/Mohit1298/rivera-cli link, SuperX WhatsApp agent, TypeSmart), added AgentRank Shopify Builder Sundays demo under 'Competitions & Showcases', added AI & ML skills line (LLM agents/tool use, RAG, embeddings, statistical forecasting), merged the two UTMIST roles into one entry, condensed Rotman to one bullet. CUT: AI Home Tour Generator project, CSSU Marketing & Events role, Unity/Blender skills. Note: Mohit1298/rivera repo is PRIVATE (404) — only rivera-cli is public, so only it is linked.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-22T04:13:22*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
 
 ### User instruction (2026-07-19): when hunting fall 2...
 
@@ -1371,42 +1407,6 @@ For CSC207 homework git work: no mention of Claude/AI anywhere except the requir
 CORRECTION (2026-07-19): Mohit's CURRENT resume file is /Users/mohitbendale/Downloads/Resume_Fin.pdf (user corrected; supersedes /Users/mohitbendale/Documents/Resume.pdf). Always use Resume_Fin.pdf for job applications.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:11:26*
-
-### Mohit asked (2026-07-19) about the cost to build a...
-
-Mohit asked (2026-07-19) about the cost to build a Boardy-like AI super-connector service (voice AI that interviews users and makes warm double-opt-in intros). Estimate given: prototype ~$5-10k cash solo, funded MVP $200-500k, Boardy itself raised $3M pre-seed + $8M seed; unit cost ~$2-5 per onboarding call at $0.13-0.31/min voice AI pricing. Possibly related to his GBrain/startup ideation.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:12:35*
-
-### Mohit's current resume file: /Users/mohitbendale/D...
-
-Mohit's current resume file: /Users/mohitbendale/Documents/Resume.pdf (last updated Jan 2026, modified May 30 2026). Note: resume states UofT Sept 2023 - May 2027 grad, but Mohit has instructed to answer June 2028 as expected graduation on applications. Resume email: mohit.bendale@mail.utoronto.ca. Prior internships: Resultant Technologies (SWE, 2024), BC Instruments (PM, 2025).
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T13:10:21*
-
-### SuperX growth strategy constraint (2026-07-19): Mo...
-
-SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
-
-### Mohit's goal: start a tech/data startup today that...
-
-Mohit's goal: start a tech/data startup today that can grow into a billion-dollar company over 10 years, structured so he benefits (revenue/value) at every stage rather than only at exit. Stated 2026-07-13.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-13T14:50:56*
-
-### Mohit is enrolled in the Venture for Canada (VFC) ...
-
-Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026-07-19): Canadian employers with UNDER 500 employees can receive a wage subsidy for hiring him. Strategy: prioritize small Canadian companies (<500 staff) for fall 2026 internships and mention VFC subsidy eligibility in outreach/applications.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
-
-### SuperX commerce layer idea from Mohit (2026-07-19)...
-
-SuperX commerce layer idea from Mohit (2026-07-19): the same WhatsApp agent doubles as a personal shopping assistant — members save someday-wishlist items + budget; agent watches merchant deals and recommends. Merchant side = a Shopify app merchants install (scoped catalog/discount read per store) getting (a) wishlist-matched sales channel paid per conversion and (b) AGGREGATE demand intelligence dashboards. Direct AgentRank synergy (demand side of his agentic-commerce thesis; Shopify network = distribution). Design constraints established: never take custody of banking credentials (self-declared budget v0, read-only Flinks/Plaid later, only derived signals stored); agent recommends but never auto-purchases; merchants get aggregates only, never individual member data (PIPEDA). Synergy: purchases from local merchants generate delivery gigs for the network. Implemented 2026-07-19: wishlist table + add/update_wishlist_item tools + self-declared monthly_budget on profile + persona WISHLIST loop with no-invented-deals rule; smoke test green. Shopify app itself deliberately deferred: one surface at a time as solo founder.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T02:01:45*
 
 ---
 
@@ -1468,17 +1468,35 @@ Greenhouse job forms: the 'Country' combobox beside Phone is the phone COUNTRY C
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T14:10:57*
 
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
 ### Mohit asked (2026-07-19) about the cost to build a...
 
 Mohit asked (2026-07-19) about the cost to build a Boardy-like AI super-connector service (voice AI that interviews users and makes warm double-opt-in intros). Estimate given: prototype ~$5-10k cash solo, funded MVP $200-500k, Boardy itself raised $3M pre-seed + $8M seed; unit cost ~$2-5 per onboarding call at $0.13-0.31/min voice AI pricing. Possibly related to his GBrain/startup ideation.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:12:35*
 
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
 ### Deepgram Software Engineering Internship (Fall 202...
 
 Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUBMITTED 2026-07-19 (Mohit completed the final upload/submit himself after Claude filled the form). Ashby posting dc8693b5-72ce-4ca3-ab15-9c8434d35da1.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:49:17*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
 
 ### User corrected: his 10-year billion-dollar startup...
 
@@ -1491,6 +1509,12 @@ User corrected: his 10-year billion-dollar startup plan must NOT be built on Riv
 User instruction (2026-07-19): when hunting fall 2026 internships, include CANADA openings (Toronto-based, UofT student — no work-auth friction), not just USA.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:07:10*
+
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
 
 ### User corrected (2026-07-19): on job application vo...
 
@@ -1540,30 +1564,6 @@ Proposed from-scratch startup idea for Mohit (2026-07-13, awaiting his validatio
 
 *Confidence: 0.75 | Status: active | Created: 2026-07-13T14:58:11*
 
-### SuperX commerce layer idea from Mohit (2026-07-19)...
-
-SuperX commerce layer idea from Mohit (2026-07-19): the same WhatsApp agent doubles as a personal shopping assistant — members save someday-wishlist items + budget; agent watches merchant deals and recommends. Merchant side = a Shopify app merchants install (scoped catalog/discount read per store) getting (a) wishlist-matched sales channel paid per conversion and (b) AGGREGATE demand intelligence dashboards. Direct AgentRank synergy (demand side of his agentic-commerce thesis; Shopify network = distribution). Design constraints established: never take custody of banking credentials (self-declared budget v0, read-only Flinks/Plaid later, only derived signals stored); agent recommends but never auto-purchases; merchants get aggregates only, never individual member data (PIPEDA). Synergy: purchases from local merchants generate delivery gigs for the network. Implemented 2026-07-19: wishlist table + add/update_wishlist_item tools + self-declared monthly_budget on profile + persona WISHLIST loop with no-invented-deals rule; smoke test green. Shopify app itself deliberately deferred: one surface at a time as solo founder.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T02:01:45*
-
-### New project kicked off 2026-07-19: SuperX (workspa...
-
-New project kicked off 2026-07-19: SuperX (workspace ~/Desktop/SuperX) — an AI superconnector agent living on WhatsApp, similar to Boardy but chat-first instead of voice-first. Vision: users give it tasks, it finds the right person in the network at the right time (double-opt-in intros); long-term it becomes a demand-aggregation layer for rides/food/stays/parking (agentic commerce, ties to his AgentRank work). This appears to be a candidate for his from-scratch billion-dollar startup idea.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T19:39:53*
-
-### Mohit's goal: start a tech/data startup today that...
-
-Mohit's goal: start a tech/data startup today that can grow into a billion-dollar company over 10 years, structured so he benefits (revenue/value) at every stage rather than only at exit. Stated 2026-07-13.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-13T14:50:56*
-
-### User corrected (2026-07-19): on US job application...
-
-User corrected (2026-07-19): on US job applications, answer NO to 'will you require visa/immigration sponsorship' questions. (Canadians commonly use J-1/TN routes that don't require employer petition sponsorship.) Supersedes the earlier assumption of answering Yes.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:54:51*
-
 ---
 
 ## Observations
@@ -1588,17 +1588,41 @@ Startup plan agreed direction (2026-07-13): build on Rivera (memory engine) + CU
 
 *Confidence: 0.9 | Status: active | Created: 2026-07-13T14:53:42*
 
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### SuperX Phase 0 implemented 2026-07-19 in ~/Desktop...
 
 SuperX Phase 0 implemented 2026-07-19 in ~/Desktop/SuperX: TypeScript + Express webhook server + node:sqlite (zero native deps) + Claude claude-opus-4-8 via @anthropic-ai/sdk beta tool runner (betaTool raw JSON schema). Agent 'Sam' has 8 tools (update_profile, remember, create_task, complete_task, search_network, propose_intro, accept_intro, decline_intro). Double-opt-in intro state machine (proposed→accepted/declined→connected) enforced in code, not prompt; STOP/START opt-out hard-coded before the LLM sees messages. CLI simulator (npm run cli) demos multi-party intros without Meta setup. Verified: tsc clean, smoke test passes, webhook verify handshake works. Live LLM test still needs ANTHROPIC_API_KEY (none in env, no ant profile).
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:18*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
 ### Job application forms (Greenhouse etc.): the 'Coun...
 
 Job application forms (Greenhouse etc.): the 'Country' field paired with Phone expects the phone DIALING CODE '+1' — type/select '+1', NOT the word 'Canada'. User corrected this twice on 2026-07-19; get it right.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T14:23:28*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
+
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
 
 ### For CSC207 homework git work: no mention of Claude...
 
@@ -1648,11 +1672,23 @@ Created ML/AI-tailored resume variant 2026-07-22: /Users/mohitbendale/Downloads/
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-22T04:13:22*
 
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### Mohit's stated concerns about SuperX viability (20...
 
 Mohit's stated concerns about SuperX viability (2026-07-19): (1) people misusing the network, (2) token costs exceeding returns. Assessment given: both are solvable/secondary; the decisive risk is marketplace liquidity (fill rate in one dense community). Token math: ~$1/completed gig unoptimized Opus vs ~$5.80 take on a $77 gig at 7.5%; Haiku triage + caching + per-user caps get cost to low single-digit % of GMV. Misuse: identity-bound membership + code-enforced consent + caps + community seeding cover most vectors; in-person safety is the tail risk to respect; hardening idea noted = strip full names from search_network results (jailbreak leak vector). Suggested kill/continue criterion: 8 weeks in one community, fill rate >=70% and repeat usage or thesis is wrong.
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-22T00:44:52*
+
+### SuperX WENT LIVE on real WhatsApp 2026-07-23: test...
+
+SuperX WENT LIVE on real WhatsApp 2026-07-23: test number +1 555-187-9714, Meta app 'SuperX' (id 1055344287196499), WABA 1783128786018863, webhook via ngrok on Mohit's laptop. Agent 'Sam' replying in ~4s. Key debugging learning: Meta's new dev console attaches its internal 'WA DevX Webhook Events 1P App' to the WABA but does NOT subscribe YOUR app — webhook URL verification succeeds yet zero message deliveries. Fix: POST /{waba_id}/subscribed_apps with the app token. Ops caveats: temp token expires ~24h (re-copy from API Setup); ngrok URL changes on restart (re-do webhook config); server+tunnel currently running from Claude Code session — standalone relaunch is 'npm start' + 'ngrok http 3000'.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:03:19*
 
 ### SuperX commerce layer idea from Mohit (2026-07-19)...
 
@@ -1684,42 +1720,6 @@ Job-application answers for Mohit (stated 2026-07-19): gender male; race/ethnici
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:48:16*
 
-### Major update: Mohit DEMOED AgentRank live at Shopi...
-
-Major update: Mohit DEMOED AgentRank live at Shopify Builder Sundays Toronto (~July 13, 2026). Scott Rollo (Machine Learning @ Shopify, runs Builder Sundays) publicly commented: 'Great job with the demo, and very cool and useful tech you've built for the age of agentic commerce.' Mohit publicly promised in a comment (~July 13) to share more about AgentRank 'plus a free audit offer' on his page 'this week' — that post is now overdue. Next Builder Sundays: Aug 9, tickets on buildersundays.com Aug 5 at 12PM. The Jul 12 DM photos from Scott are likely of Mohit's demo.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T15:51:44*
-
-### Cloudflare Software Engineer Intern (Fall 2026, Au...
-
-Cloudflare Software Engineer Intern (Fall 2026, Austin TX) application submitted by Mohit himself 2026-07-19 (gh_jid 8052785) after Claude pre-filled most of the form. Answers used: sponsorship No, enrolled Yes, grad June 2028, Bachelor's, available upon graduation, 12-week Yes, Austin office Yes, interests Full-stack + Backend/Systems.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:11*
-
-### User corrected: his 10-year billion-dollar startup...
-
-User corrected: his 10-year billion-dollar startup plan must NOT be built on Rivera or existing CUA assets. He wants a brand-new from-scratch idea targeting a market (tech/data). The 2026-07-13 'startup plan agreed direction' memory (Rivera-based 5-phase plan) is superseded as his startup plan — Rivera remains just a side project.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-13T14:57:42*
-
-### Mohit is enrolled in the Venture for Canada (VFC) ...
-
-Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026-07-19): Canadian employers with UNDER 500 employees can receive a wage subsidy for hiring him. Strategy: prioritize small Canadian companies (<500 staff) for fall 2026 internships and mention VFC subsidy eligibility in outreach/applications.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
-
-### Mohit's current resume file: /Users/mohitbendale/D...
-
-Mohit's current resume file: /Users/mohitbendale/Documents/Resume.pdf (last updated Jan 2026, modified May 30 2026). Note: resume states UofT Sept 2023 - May 2027 grad, but Mohit has instructed to answer June 2028 as expected graduation on applications. Resume email: mohit.bendale@mail.utoronto.ca. Prior internships: Resultant Technologies (SWE, 2024), BC Instruments (PM, 2025).
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T13:10:21*
-
-### SuperX growth strategy constraint (2026-07-19): Mo...
-
-SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
-
 ---
 
 ## Artifacts
@@ -1744,6 +1744,12 @@ Startup plan agreed direction (2026-07-13): build on Rivera (memory engine) + CU
 
 *Confidence: 0.9 | Status: active | Created: 2026-07-13T14:53:42*
 
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
+
 ### Created ML/AI-tailored resume variant 2026-07-22: ...
 
 Created ML/AI-tailored resume variant 2026-07-22: /Users/mohitbendale/Downloads/Resume_ML_AI.pdf (LaTeX source Resume_ML_AI.tex alongside, compiled with pdflatex; same Computer Modern style as Resume_Fin.pdf). Use for ML/AI internship applications; Resume_Fin.pdf remains the general SWE resume. Changes vs Resume_Fin: added 'AI & Machine Learning Projects' section (Rivera memory engine w/ github.com/Mohit1298/rivera-cli link, SuperX WhatsApp agent, TypeSmart), added AgentRank Shopify Builder Sundays demo under 'Competitions & Showcases', added AI & ML skills line (LLM agents/tool use, RAG, embeddings, statistical forecasting), merged the two UTMIST roles into one entry, condensed Rotman to one bullet. CUT: AI Home Tour Generator project, CSSU Marketing & Events role, Unity/Blender skills. Note: Mohit1298/rivera repo is PRIVATE (404) — only rivera-cli is public, so only it is linked.
@@ -1762,6 +1768,18 @@ For CSC207 homework git work: no mention of Claude/AI anywhere except the requir
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-17T18:19:38*
 
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
+
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### Mohit's stated concerns about SuperX viability (20...
 
 Mohit's stated concerns about SuperX viability (2026-07-19): (1) people misusing the network, (2) token costs exceeding returns. Assessment given: both are solvable/secondary; the decisive risk is marketplace liquidity (fill rate in one dense community). Token math: ~$1/completed gig unoptimized Opus vs ~$5.80 take on a $77 gig at 7.5%; Haiku triage + caching + per-user caps get cost to low single-digit % of GMV. Misuse: identity-bound membership + code-enforced consent + caps + community seeding cover most vectors; in-person safety is the tail risk to respect; hardening idea noted = strip full names from search_network results (jailbreak leak vector). Suggested kill/continue criterion: 8 weeks in one community, fill rate >=70% and repeat usage or thesis is wrong.
@@ -1779,6 +1797,18 @@ SuperX commerce layer idea from Mohit (2026-07-19): the same WhatsApp agent doub
 Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUBMITTED 2026-07-19 (Mohit completed the final upload/submit himself after Claude filled the form). Ashby posting dc8693b5-72ce-4ca3-ab15-9c8434d35da1.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:49:17*
+
+### SuperX WENT LIVE on real WhatsApp 2026-07-23: test...
+
+SuperX WENT LIVE on real WhatsApp 2026-07-23: test number +1 555-187-9714, Meta app 'SuperX' (id 1055344287196499), WABA 1783128786018863, webhook via ngrok on Mohit's laptop. Agent 'Sam' replying in ~4s. Key debugging learning: Meta's new dev console attaches its internal 'WA DevX Webhook Events 1P App' to the WABA but does NOT subscribe YOUR app — webhook URL verification succeeds yet zero message deliveries. Fix: POST /{waba_id}/subscribed_apps with the app token. Ops caveats: temp token expires ~24h (re-copy from API Setup); ngrok URL changes on restart (re-do webhook config); server+tunnel currently running from Claude Code session — standalone relaunch is 'npm start' + 'ngrok http 3000'.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:03:19*
+
+### SuperX shopping-assistant GTM strategy discussion ...
+
+SuperX shopping-assistant GTM strategy discussion (2026-07-23): Mohit asked (1) how to get users to volunteer data in exchange for value, (2) grounded in what consumers already have in 2026. Key strategy given: the differentiator vs ChatGPT/Perplexity/Honey/Rufus/Klarna is NOT 'AI that shops' (commoditized) but the permissioned PROACTIVE channel (WhatsApp) + persistent intent (standing wishlist) + affordability context + zero-maintenance capture via forwarding. Data-for-value ladder: msg-zero hook = 'forward me any product link, I'll tell you if it's a good price' (zero data, instant value via web search) → 'want me to watch it?' (wishlist intent) → budget question → sizes/brands/gift dates → location (delivery synergy) → much later read-only open banking. Principles: value precedes data; capture in conversation not forms; show-the-ledger transparency; agent visibly on the user's side including 'don't buy this, it's overpriced' advice = the trust move that earns data. Revenue only from conversion fees, never biased ranking. Acquisition moments: forwards from friends, group chats, gifting deadlines, BFCM fake-deal audits.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T15:17:23*
 
 ### User corrected: his 10-year billion-dollar startup...
 
@@ -1822,6 +1852,12 @@ Mohit's current resume file: /Users/mohitbendale/Documents/Resume.pdf (last upda
 
 *Confidence: 0.95 | Status: active | Created: 2026-07-19T13:10:21*
 
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
+
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
+
 ### Mohit's constraints for any Shopify (or similar) d...
 
 Mohit's constraints for any Shopify (or similar) deal around SuperX/AgentRank (stated 2026-07-19): he wants to (1) complete his UofT education, (2) intern at DIFFERENT companies before graduation (so no multi-term exclusivity), (3) keep building his startup. Advice given — best-fit package to aim for: term-scoped paid internship (fall 2026 via Scott Rollo referral path) + WRITTEN IP carve-out listing SuperX+AgentRank as excluded prior inventions + Shopify partner-track support for the product (early agentic-commerce API access, app review fast-track, merchant pilot cohort) as a partner agreement separate from employment + optionally a clean strategic SAFE (no ROFR, no exclusivity, no board seat). Red lines: never sign broad invention-assignment without exclusion schedule; no exclusivity on his time or the product's platform; no right-of-first-refusal on acquisition; don't sell IP pre-traction; don't take Shopify as sole investor. Sequence: internship first (urgent), product stays independent.
@@ -1839,42 +1875,6 @@ Mohit asked (2026-07-19) about the cost to build a Boardy-like AI super-connecto
 User corrected (2026-07-19): on job application voluntary disability self-identification questions, answer YES from now on (supersedes earlier 'no disability' answer from the same day).
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:06:07*
-
-### Mohit's goal: start a tech/data startup today that...
-
-Mohit's goal: start a tech/data startup today that can grow into a billion-dollar company over 10 years, structured so he benefits (revenue/value) at every stage rather than only at exit. Stated 2026-07-13.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-13T14:50:56*
-
-### Job-application answers for Mohit (stated 2026-07-...
-
-Job-application answers for Mohit (stated 2026-07-19): gender male; race/ethnicity South Asian (US EEO category: Asian); no disability; not a protected veteran; LinkedIn https://www.linkedin.com/in/mohit-bendale-a366b01a6/; current location Toronto, Canada. Also: Canadian requiring US visa sponsorship. Email mohit.bendale@mail.utoronto.ca, phone 365-777-3848, UofT HBSc Applied Statistics & CS, Sept 2023 - May 2028.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:48:16*
-
-### User instruction (2026-07-19): when hunting fall 2...
-
-User instruction (2026-07-19): when hunting fall 2026 internships, include CANADA openings (Toronto-based, UofT student — no work-auth friction), not just USA.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:07:10*
-
-### Major update: Mohit DEMOED AgentRank live at Shopi...
-
-Major update: Mohit DEMOED AgentRank live at Shopify Builder Sundays Toronto (~July 13, 2026). Scott Rollo (Machine Learning @ Shopify, runs Builder Sundays) publicly commented: 'Great job with the demo, and very cool and useful tech you've built for the age of agentic commerce.' Mohit publicly promised in a comment (~July 13) to share more about AgentRank 'plus a free audit offer' on his page 'this week' — that post is now overdue. Next Builder Sundays: Aug 9, tickets on buildersundays.com Aug 5 at 12PM. The Jul 12 DM photos from Scott are likely of Mohit's demo.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T15:51:44*
-
-### New project kicked off 2026-07-19: SuperX (workspa...
-
-New project kicked off 2026-07-19: SuperX (workspace ~/Desktop/SuperX) — an AI superconnector agent living on WhatsApp, similar to Boardy but chat-first instead of voice-first. Vision: users give it tasks, it finds the right person in the network at the right time (double-opt-in intros); long-term it becomes a demand-aggregation layer for rides/food/stays/parking (agentic commerce, ties to his AgentRank work). This appears to be a candidate for his from-scratch billion-dollar startup idea.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T19:39:53*
-
-### Mohit's Agentrank LinkedIn post has a specific str...
-
-Mohit's Agentrank LinkedIn post has a specific strategic goal: get Scott (strong connection at Shopify) to like it AND forward it internally to his team, indirectly positioning Mohit as the obvious intern hire for fall 2026. Post must be written to be forwardable — ecosystem insight framing, not self-promo.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T15:43:31*
 
 ---
 
@@ -1924,11 +1924,23 @@ Greenhouse job forms: the 'Country' combobox beside Phone is the phone COUNTRY C
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T14:10:57*
 
+### SuperX went fully serverless 2026-07-23: compute o...
+
+SuperX went fully serverless 2026-07-23: compute on Vercel (project superx, prod URL https://superx-ten.vercel.app — root 302-redirects into wa.me chat with Sam), data on Supabase Postgres in isolated 'superx' schema + dedicated superx_app role (default search_path; Rivera's tables untouched, zero marginal cost on existing plans). All 66 messages + wishlist migrated; laptop retired. Debugging learnings: Vercel importing an Express repo auto-sets Express preset → routes '/' to src/server.ts and REQUIRES a default-exported app ('Invalid export found' 500s otherwise — fixed by 'export default createServer()'); Vercel builder resolves Anthropic SDK CJS typings (namespace types fail — use named import + structural types); Vercel Hobby caps crons at daily (deal-watch moved to 0 14 * * * UTC) — his Vercel is Hobby despite 'paying' claim. Remaining launch gates: Meta webhook swap to /api/webhook, permanent System User token into Vercel env, production WhatsApp number + business verification before public LinkedIn launch (test number = 5 recipients max). LAUNCH.md marketing playbook + LinkedIn draft still owed.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T21:02:26*
+
 ### CORRECTION (2026-07-19): Mohit's CURRENT resume fi...
 
 CORRECTION (2026-07-19): Mohit's CURRENT resume file is /Users/mohitbendale/Downloads/Resume_Fin.pdf (user corrected; supersedes /Users/mohitbendale/Documents/Resume.pdf). Always use Resume_Fin.pdf for job applications.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T13:11:26*
+
+### SuperX productionization completed 2026-07-23: mig...
+
+SuperX productionization completed 2026-07-23: migrated node:sqlite → PostgreSQL (pg Pool, DATABASE_URL-driven, async through every layer), verified full smoke suite against local Postgres 15 (had to clear stale postmaster.pid + set LC_ALL for brew postgres). Data migration script scripts/migrate-sqlite.ts preserves ids + fixes UTC timestamps; ran successfully (2 users, 66 messages, 4 wishlist items). Added per-user cost cap MAX_USER_MSGS_PER_DAY=50 in brain.ts. Laptop now runs new stack (local PG db 'superx'), new ngrok URL 40dd-70-29-103-65 (Meta webhook needs updating to it OR straight to Railway). LAUNCH.md written: Railway deploy runbook (app + managed PG + data browser = his 'SQL anytime' ask), Meta production gate (permanent System User token, real phone number — TEST number cannot serve public launch, business verification via Ontario sole prop ~$60, deal_alert template for out-of-window pings), 48h burst marketing plan (LinkedIn + WhatsApp groups + UofT back-to-school + RFD + Reels + Builder Sundays Aug 9), LinkedIn post draft included, D7 return rate >30% as the go/no-go metric.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T18:26:53*
 
 ### User instruction (2026-07-19): when hunting fall 2...
 
@@ -1972,11 +1984,23 @@ Deepgram Software Engineering Internship (Fall 2026/Summer 2027) application SUB
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:49:17*
 
+### SuperX WENT LIVE on real WhatsApp 2026-07-23: test...
+
+SuperX WENT LIVE on real WhatsApp 2026-07-23: test number +1 555-187-9714, Meta app 'SuperX' (id 1055344287196499), WABA 1783128786018863, webhook via ngrok on Mohit's laptop. Agent 'Sam' replying in ~4s. Key debugging learning: Meta's new dev console attaches its internal 'WA DevX Webhook Events 1P App' to the WABA but does NOT subscribe YOUR app — webhook URL verification succeeds yet zero message deliveries. Fix: POST /{waba_id}/subscribed_apps with the app token. Ops caveats: temp token expires ~24h (re-copy from API Setup); ngrok URL changes on restart (re-do webhook config); server+tunnel currently running from Claude Code session — standalone relaunch is 'npm start' + 'ngrok http 3000'.
+
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:03:19*
+
 ### User corrected (2026-07-19): on US job application...
 
 User corrected (2026-07-19): on US job applications, answer NO to 'will you require visa/immigration sponsorship' questions. (Canadians commonly use J-1/TN routes that don't require employer petition sponsorship.) Supersedes the earlier assumption of answering Yes.
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-19T12:54:51*
+
+### SuperX deal-watch feature shipped 2026-07-23 per M...
+
+SuperX deal-watch feature shipped 2026-07-23 per Mohit's request ('auto ping on wishlist deals, not token intensive'). Cost design: Haiku 4.5 (config DEAL_WATCH_MODEL) + basic web_search_20250305, all of a user's due items batched in ONE call, each item checked max once/24h (DEAL_WATCH_HOURS), hourly scheduler tick in index.ts + manual 'npm run deals', ping text composed in CODE (zero LLM tokens), pings only when price <= ceiling (or clear discount if no ceiling) AND beats last alerted price; window-blocked pings stored on the item and surfaced in next chat via dynamic context. ~$0.02-0.04/item/day. First real run: 3 items checked, correctly held back Aldo heels ($110 vs $100 ceiling) and OLED TV (no discount; noted 83in OLED max), pinged a $25,500 CarGurus Tesla Model 3 to Mohit's phone. Calibration note: no-ceiling items rely on model is_deal judgment — eager on marketplace listings; ceilings make pings precise.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-23T17:44:37*
 
 ### Mohit asked (2026-07-19) about the cost to build a...
 
@@ -2002,35 +2026,11 @@ Mohit's goal: start a tech/data startup today that can grow into a billion-dolla
 
 *Confidence: 1.0 | Status: active | Created: 2026-07-13T14:50:56*
 
-### Mohit is enrolled in the Venture for Canada (VFC) ...
+### PIVOT DECISION by Mohit (2026-07-23): SuperX leads...
 
-Mohit is enrolled in the Venture for Canada (VFC) Internship Program (as of 2026-07-19): Canadian employers with UNDER 500 employees can receive a wage subsidy for hiring him. Strategy: prioritize small Canadian companies (<500 staff) for fall 2026 internships and mention VFC subsidy eligibility in outreach/applications.
+PIVOT DECISION by Mohit (2026-07-23): SuperX leads with the PERSONAL SHOPPING ASSISTANT as Phase 1 (easier path — works with zero network density, single-user value from message one). Errands/gig economy + intros move to Phase 2 (code already built, kept behind ENABLE_GIGS flag, default off). Shopping copilot hook: forward a product link → price verdict via web search; wishlist watching; self-declared budget. Rationale: gig loop needs neighbourhood liquidity to be valuable; shopping assistant valuable to the first user alone.
 
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T13:08:44*
-
-### SuperX growth strategy constraint (2026-07-19): Mo...
-
-SuperX growth strategy constraint (2026-07-19): Mohit's goal of 'reach millions fast on WhatsApp' CANNOT be done via cold mass-messaging — WhatsApp Business Platform requires opt-in + templates for business-initiated messages (tiers start at 250/day, scale to unlimited only with quality rating), unofficial libraries get banned, and CASL (Canada) makes cold spam illegal. Correct loop designed into the product: user-initiated chats are unlimited, each unmatched task recruits supply via forwarded wa.me links, communities/groups are the seeding channel (Builder Sundays Aug 9 is the planned Toronto launch venue). Uber-on-WhatsApp in India is the precedent that transactional verticals (Phase 3: parking→stays→food→rides) are platform-sanctioned.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-19T19:52:22*
-
-### URGENT (2026-07-19): Mohit says he has ~2 days to ...
-
-URGENT (2026-07-19): Mohit says he has ~2 days to land a fall 2026 internship or he gets none. Shopify official fall 2026 application closed May 7 — only path there is Scott Rollo referral/backdoor. Plan: 48h application blitz on still-open fall roles (Notion, NVIDIA, Amazon Robotics, SpaceX, rolling defense) + direct startup outreach using Agentrank/Rivera/CUA as proof of work.
-
-*Confidence: 1.0 | Status: active | Created: 2026-07-19T12:28:47*
-
-### Proposed from-scratch startup idea for Mohit (2026...
-
-Proposed from-scratch startup idea for Mohit (2026-07-13, awaiting his validation): AI governance/assurance platform ('Vanta for AI'). Phase 1: self-serve EU AI Act / ISO 42001 readiness tool. Phase 2: continuous compliance with automated evidence-collection agents. Phase 3: runtime assurance (production AI monitoring, incident registry). Phase 4: cross-deployment risk data -> AI risk scores + insurance underwriting partnerships. Phase 5: certification/trust layer for the AI economy. Comps: Vanta $2.45B, Drata $2B. Rationale: regulation-forced budget, solo-founder-friendly GTM, uses his agent-building skills without depending on Rivera/CUA code.
-
-*Confidence: 0.75 | Status: active | Created: 2026-07-13T14:58:11*
-
-### SuperX commerce layer idea from Mohit (2026-07-19)...
-
-SuperX commerce layer idea from Mohit (2026-07-19): the same WhatsApp agent doubles as a personal shopping assistant — members save someday-wishlist items + budget; agent watches merchant deals and recommends. Merchant side = a Shopify app merchants install (scoped catalog/discount read per store) getting (a) wishlist-matched sales channel paid per conversion and (b) AGGREGATE demand intelligence dashboards. Direct AgentRank synergy (demand side of his agentic-commerce thesis; Shopify network = distribution). Design constraints established: never take custody of banking credentials (self-declared budget v0, read-only Flinks/Plaid later, only derived signals stored); agent recommends but never auto-purchases; merchants get aggregates only, never individual member data (PIPEDA). Synergy: purchases from local merchants generate delivery gigs for the network. Implemented 2026-07-19: wishlist table + add/update_wishlist_item tools + self-declared monthly_budget on profile + persona WISHLIST loop with no-invented-deals rule; smoke test green. Shopify app itself deliberately deferred: one surface at a time as solo founder.
-
-*Confidence: 0.95 | Status: active | Created: 2026-07-22T02:01:45*
+*Confidence: 1.0 | Status: active | Created: 2026-07-23T15:28:40*
 
 ---
 

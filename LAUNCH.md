@@ -35,19 +35,19 @@ Business Settings → Security Centre → Start verification. Needs a legal busi
 
 ## Step 3 — Pre-launch checklist (the day before posting)
 
-- [x] Deployed (Vercel + Supabase), webhook green, Sam answering ✅ — remaining: swap to the **production number**
+- [x] Deployed (Vercel + Supabase), webhook green, Super answering ✅ — remaining: swap to the **production number**
 - [ ] Permanent token in place (no more 24h deaths)
 - [ ] Per-user cap live (it is — `MAX_USER_MSGS_PER_DAY=50`) 
 - [ ] Anthropic console → Billing → set a **budget alert** (e.g. $50/mo). Rough cost: an active user ≈ $0.10–0.40/day on Opus; 100 casual users ≈ $50–150/mo. Lever if it runs hot: `ANTHROPIC_MODEL=claude-sonnet-5` cuts ~40% with minor quality loss — your call, flip anytime.
 - [ ] 3 friends run the full flow (price check → wishlist → next-day ping) without you explaining anything
 - [ ] `wa.me/<PRODUCTION-NUMBER>?text=hi` link tested + QR generated (any QR generator)
-- [ ] 45-second screen recording: forward a product → Sam's verdict → a deal ping. Real conversation, no mockups.
+- [ ] 45-second screen recording: forward a product → Super's verdict → a deal ping. Real conversation, no mockups.
 
 ---
 
 ## Marketing Plan — "a lot of users, fast"
 
-**Positioning (one sentence everywhere):** *Sam is a free shopping copilot on WhatsApp — forward it anything you're about to buy and it tells you if it's actually a good price, then watches what you want and pings you when it drops.*
+**Positioning (one sentence everywhere):** *Super is a free shopping copilot on WhatsApp — forward it anything you're about to buy and it tells you if it's actually a good price, then watches what you want and pings you when it drops.*
 
 **The honest physics:** nothing legitimate gets you "a lot at once" except a coordinated burst + a product moment people retell. Your retellable moment is **"it told me NOT to buy"** — lead every asset with it. And WhatsApp's native gesture (forwarding) is your growth loop: every good verdict ends with something worth forwarding.
 
@@ -63,7 +63,7 @@ Business Settings → Security Centre → Start verification. Needs a legal busi
 | **Builder Sundays Aug 9** | Live demo + QR on screen; you already have the room | 30–80 highly-engaged |
 | **Product Hunt** | Only after 2+ stable weeks + a landing page | Later |
 
-**In-product loop (already built):** after a good outcome Sam asks for a forward. Add "how did you hear about me?" to onboarding conversation for attribution — one line in the persona when you want it.
+**In-product loop (already built):** after a good outcome Super asks for a forward. Add "how did you hear about me?" to onboarding conversation for attribution — one line in the persona when you want it.
 
 **What decides success (watch weekly in the DB):** new users, **D7 return rate** (the metric), price checks/user, wishlist adds/user, pings sent. If D7 return is >30%, pour on channels; if <10%, fix the product before more marketing.
 
@@ -71,9 +71,9 @@ Business Settings → Security Centre → Start verification. Needs a legal busi
 
 ## LinkedIn post draft (edit voice to taste)
 
-> I got tired of not knowing whether a "deal" was actually a deal. So I built Sam.
+> I got tired of not knowing whether a "deal" was actually a deal. So I built Super.
 >
-> Sam is a shopping copilot that lives in WhatsApp. No app, no signup:
+> Super is a shopping copilot that lives in WhatsApp. No app, no signup:
 >
 > → Forward it any product — link or screenshot — and it checks real prices across stores in seconds
 > → It's honest to a fault: this week it talked me *out* of buying AirPods at $329 ("that's full price — the real sale is ~$269, wait")

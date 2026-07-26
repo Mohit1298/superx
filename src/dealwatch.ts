@@ -156,7 +156,7 @@ export async function runDealWatch(sendTo: SendFn): Promise<DealWatchSummary> {
         summary.pinged++;
       } catch (err) {
         // Likely outside WhatsApp's 24h service window — deal stays stored on
-        // the item, so Sam surfaces it next time the member texts.
+        // the item, so Super surfaces it next time the member texts.
         console.error(`[dealwatch] ping blocked for ${user.phone}:`, err instanceof Error ? err.message : err);
         summary.stored++;
       }
