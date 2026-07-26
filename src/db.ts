@@ -242,6 +242,26 @@ async function init(): Promise<void> {
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
 
+    -- De-identified demand signal: wishlist items outlive user erasure with
+    -- zero PII linkage. This feeds merchant demand intelligence.
+    CREATE TABLE IF NOT EXISTS demand_log (
+      id BIGSERIAL PRIMARY KEY,
+      item TEXT NOT NULL,
+      details TEXT,
+      price_ceiling_cents INTEGER,
+      created_at TIMESTAMPTZ,
+      logged_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+
+    -- 30-day recovery window for user-requested erasure; hard-purged by cron.
+    CREATE TABLE IF NOT EXISTS erasure_archive (
+      id BIGSERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL,
+      payload JSONB NOT NULL,
+      purge_after TIMESTAMPTZ NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+
     -- Shopify partner merchants (installed our app) and their live catalog,
     -- kept current by product webhooks. This is Shoppy's ground-truth tier.
     CREATE TABLE IF NOT EXISTS merchants (
@@ -608,6 +628,22 @@ export async function resetDb(): Promise<void> {
  * and a future text from that number starts a brand-new blank member.
  */
 export async function deleteUserData(userId: number): Promise<void> {
+  // De-identified demand signal survives erasure (no user linkage).
+  await q(
+    `INSERT INTO demand_log (item, details, price_ceiling_cents, created_at)
+     SELECT item, details, price_ceiling_cents, created_at FROM wishlist WHERE user_id = $1 AND status = 'watching'`,
+    [userId]
+  );
+  // Full snapshot for the disclosed 30-day recovery window, then the wipe.
+  await q(
+    `INSERT INTO erasure_archive (user_id, payload, purge_after) VALUES ($1, jsonb_build_object(
+       'user', (SELECT to_jsonb(u) FROM users u WHERE u.id = $1),
+       'messages', (SELECT coalesce(jsonb_agg(to_jsonb(m)), '[]'::jsonb) FROM messages m WHERE m.user_id = $1),
+       'wishlist', (SELECT coalesce(jsonb_agg(to_jsonb(w)), '[]'::jsonb) FROM wishlist w WHERE w.user_id = $1),
+       'notes',    (SELECT coalesce(jsonb_agg(to_jsonb(n)), '[]'::jsonb) FROM notes n WHERE n.user_id = $1)
+     ), now() + interval '30 days')`,
+    [userId]
+  );
   await q(
     `DELETE FROM ledger WHERE offer_id IN
        (SELECT id FROM offers WHERE requester_id = $1 OR fulfiller_id = $1)`,
@@ -627,6 +663,43 @@ export async function deleteUserData(userId: number): Promise<void> {
      WHERE id = $1`,
     [userId]
   );
+}
+
+/** Hard-purge archives past their disclosed 30-day recovery window. */
+export async function purgeExpiredArchives(): Promise<number> {
+  const rows = await q<{ id: number }>(
+    "DELETE FROM erasure_archive WHERE purge_after < now() RETURNING id"
+  );
+  return rows.length;
+}
+
+/**
+ * Admin-grade undo within the recovery window: restores the user row (over
+ * the anonymized shell if it survives, or recreated with its original id)
+ * and every archived child row.
+ */
+export async function restoreErasedUser(archiveId: number): Promise<string> {
+  const rows = await q<{ user_id: number; payload: Record<string, unknown> }>(
+    "SELECT user_id, payload FROM erasure_archive WHERE id = $1",
+    [archiveId]
+  );
+  if (!rows[0]) return "archive not found";
+  const p = rows[0].payload as { user: unknown; messages: unknown; wishlist: unknown; notes: unknown };
+  await q(`DELETE FROM users WHERE id = $1 AND phone LIKE 'deleted:%'`, [rows[0].user_id]);
+  await q(`INSERT INTO users SELECT * FROM jsonb_populate_record(NULL::users, $1::jsonb)`, [
+    JSON.stringify(p.user),
+  ]);
+  await q(`INSERT INTO messages SELECT * FROM jsonb_populate_recordset(NULL::messages, $1::jsonb)`, [
+    JSON.stringify(p.messages),
+  ]);
+  await q(`INSERT INTO wishlist SELECT * FROM jsonb_populate_recordset(NULL::wishlist, $1::jsonb)`, [
+    JSON.stringify(p.wishlist),
+  ]);
+  await q(`INSERT INTO notes SELECT * FROM jsonb_populate_recordset(NULL::notes, $1::jsonb)`, [
+    JSON.stringify(p.notes),
+  ]);
+  await q("DELETE FROM erasure_archive WHERE id = $1", [archiveId]);
+  return "restored";
 }
 
 // ---------- Shopify partner catalog ----------

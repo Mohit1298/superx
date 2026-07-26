@@ -34,7 +34,7 @@ export function createServer() {
         `<p><b>What we store:</b> your WhatsApp phone number, your messages with Shoppy, and any wishlist items you ask us to watch. That's what makes the product work — price checks, memory, and deal alerts.</p>
          <p><b>What we don't do:</b> sell your data, share your conversations with advertisers, or message people you know.</p>
          <p><b>Processing:</b> messages are processed by Anthropic's Claude to generate replies, delivered via Meta's WhatsApp Business Platform, and stored in our database in Canada-accessible cloud infrastructure.</p>
-         <p><b>Your controls:</b> text "stop" to opt out of proactive alerts, or ask Shoppy to delete your data and we'll remove your account, messages, and wishlist.</p>
+         <p><b>Your controls:</b> text "stop" to opt out of proactive alerts, or ask Shoppy to delete your data — your account, messages, and wishlist are removed immediately and permanently purged within 30 days. De-identified wishlist demand (item and target price, with no link to you) may be retained in aggregate.</p>
          <p>Questions: message Shoppy or email mohitab2005@gmail.com.</p>`
       )
     );
