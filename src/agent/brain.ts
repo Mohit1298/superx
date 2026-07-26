@@ -120,10 +120,17 @@ export async function handleIncomingMessage(
       }
     }
 
-    // Join with "" (not "\n"): web-search citations split sentences across
-    // text blocks, and spans carry their own spacing. Then tidy whitespace.
-    const reply = (final?.content ?? [])
-      .filter((b: { type: string; text?: string }) => b.type === "text")
+    // The reply is ONLY the trailing text blocks — text before/between tool
+    // calls is the model narrating its work ("let me parse the JSON…") and
+    // must never reach the member. Join with "" (not "\n"): citations split
+    // sentences across blocks and spans carry their own spacing.
+    const content = final?.content ?? [];
+    let lastToolIdx = -1;
+    for (let i = 0; i < content.length; i++) {
+      if (content[i].type !== "text") lastToolIdx = i;
+    }
+    const reply = content
+      .slice(lastToolIdx + 1)
       .map((b: { type: string; text?: string }) => b.text ?? "")
       .join("")
       .replace(/\n{3,}/g, "\n\n")
