@@ -241,6 +241,33 @@ async function init(): Promise<void> {
       wa_message_id TEXT PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
+
+    -- Shopify partner merchants (installed our app) and their live catalog,
+    -- kept current by product webhooks. This is Shoppy's ground-truth tier.
+    CREATE TABLE IF NOT EXISTS merchants (
+      shop_domain TEXT PRIMARY KEY,
+      access_token TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active',
+      installed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+
+    CREATE TABLE IF NOT EXISTS partner_products (
+      id BIGSERIAL PRIMARY KEY,
+      shop_domain TEXT NOT NULL REFERENCES merchants(shop_domain) ON DELETE CASCADE,
+      product_id BIGINT NOT NULL,
+      variant_id BIGINT NOT NULL,
+      title TEXT NOT NULL,
+      variant_title TEXT,
+      handle TEXT NOT NULL,
+      price_cents INTEGER NOT NULL,
+      compare_at_cents INTEGER,
+      available BOOLEAN NOT NULL DEFAULT true,
+      image_url TEXT,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      UNIQUE (shop_domain, variant_id)
+    );
+    CREATE INDEX IF NOT EXISTS partner_products_title_idx
+      ON partner_products USING gin (to_tsvector('simple', title || ' ' || coalesce(variant_title, '')));
   `);
 }
 
@@ -569,6 +596,120 @@ export async function markProcessed(waMessageId: string): Promise<boolean> {
 export async function resetDb(): Promise<void> {
   await pool.query(
     "TRUNCATE users, messages, tasks, offers, ledger, intros, wishlist, notes, processed_messages RESTART IDENTITY"
+  );
+}
+
+// ---------- Shopify partner catalog ----------
+
+export interface PartnerHit {
+  shop_domain: string;
+  title: string;
+  variant_title: string | null;
+  handle: string;
+  variant_id: string;
+  price_cents: number;
+  compare_at_cents: number | null;
+  available: boolean;
+}
+
+export async function upsertMerchant(shopDomain: string, accessToken: string): Promise<void> {
+  await q(
+    `INSERT INTO merchants (shop_domain, access_token, status) VALUES ($1, $2, 'active')
+     ON CONFLICT (shop_domain) DO UPDATE SET access_token = EXCLUDED.access_token, status = 'active'`,
+    [shopDomain, accessToken]
+  );
+}
+
+export async function getMerchant(shopDomain: string): Promise<{ access_token: string } | undefined> {
+  return (await q<{ access_token: string }>(
+    "SELECT access_token FROM merchants WHERE shop_domain = $1 AND status = 'active'",
+    [shopDomain]
+  ))[0];
+}
+
+export async function removeMerchant(shopDomain: string): Promise<void> {
+  await q("DELETE FROM merchants WHERE shop_domain = $1", [shopDomain]); // products cascade
+}
+
+/** Upsert every variant of one Shopify product payload (install sync + webhooks). */
+export async function upsertPartnerProduct(
+  shopDomain: string,
+  p: {
+    id: number;
+    title: string;
+    handle: string;
+    status?: string;
+    image?: { src?: string } | null;
+    variants?: Array<{
+      id: number;
+      title?: string | null;
+      price?: string;
+      compare_at_price?: string | null;
+      available?: boolean;
+      inventory_quantity?: number;
+      inventory_policy?: string;
+    }>;
+  }
+): Promise<void> {
+  if (p.status && p.status !== "active") {
+    await q("DELETE FROM partner_products WHERE shop_domain = $1 AND product_id = $2", [shopDomain, p.id]);
+    return;
+  }
+  for (const v of p.variants ?? []) {
+    const available =
+      v.available ?? (v.inventory_policy === "continue" || (v.inventory_quantity ?? 0) > 0);
+    await q(
+      `INSERT INTO partner_products
+         (shop_domain, product_id, variant_id, title, variant_title, handle, price_cents, compare_at_cents, available, image_url, updated_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, now())
+       ON CONFLICT (shop_domain, variant_id) DO UPDATE SET
+         title = EXCLUDED.title, variant_title = EXCLUDED.variant_title, handle = EXCLUDED.handle,
+         price_cents = EXCLUDED.price_cents, compare_at_cents = EXCLUDED.compare_at_cents,
+         available = EXCLUDED.available, image_url = EXCLUDED.image_url, updated_at = now()`,
+      [
+        shopDomain,
+        p.id,
+        v.id,
+        p.title,
+        v.title ?? null,
+        p.handle,
+        toCents(Number(v.price ?? 0)),
+        v.compare_at_price != null ? toCents(Number(v.compare_at_price)) : null,
+        available,
+        p.image?.src ?? null,
+      ]
+    );
+  }
+}
+
+export async function deletePartnerProduct(shopDomain: string, productId: number): Promise<void> {
+  await q("DELETE FROM partner_products WHERE shop_domain = $1 AND product_id = $2", [shopDomain, productId]);
+}
+
+/** Word-AND search over the live partner catalog; sized variants filter by `size`. */
+export async function searchPartnerCatalog(query: string, size?: string, limit = 8): Promise<PartnerHit[]> {
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean).slice(0, 6);
+  if (words.length === 0) return [];
+  const conds: string[] = [];
+  const params: unknown[] = [];
+  for (const w of words) {
+    params.push(`%${w}%`);
+    conds.push(`(lower(title) LIKE $${params.length} OR lower(coalesce(variant_title,'')) LIKE $${params.length})`);
+  }
+  let sizeCond = "";
+  if (size?.trim()) {
+    params.push(`%${size.trim().toLowerCase()}%`);
+    sizeCond = ` AND lower(coalesce(variant_title,'')) LIKE $${params.length}`;
+  }
+  params.push(limit);
+  return q<PartnerHit>(
+    `SELECT shop_domain, title, variant_title, handle, variant_id::text AS variant_id,
+            price_cents, compare_at_cents, available
+     FROM partner_products
+     WHERE ${conds.join(" AND ")}${sizeCond}
+     ORDER BY available DESC, price_cents ASC
+     LIMIT $${params.length}`,
+    params
   );
 }
 

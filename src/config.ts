@@ -26,6 +26,13 @@ export const config = {
   },
   port: Number(process.env.PORT ?? 3000),
   dbPath: process.env.DB_PATH ?? "superx.db",
+  // Shopify partner app (merchant-side live catalog). Inert until the
+  // Partner-dashboard app's credentials land in env.
+  shopify: {
+    apiKey: process.env.SHOPIFY_API_KEY ?? "",
+    apiSecret: process.env.SHOPIFY_API_SECRET ?? "",
+    appUrl: process.env.SHOPIFY_APP_URL ?? "https://superx-ten.vercel.app",
+  },
   // Number people text to reach the agent (for wa.me links on the landing/root)
   waLinkNumber: process.env.WA_LINK_NUMBER ?? "15551879714",
   whatsapp: {

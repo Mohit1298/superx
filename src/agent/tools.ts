@@ -1,5 +1,6 @@
 import { betaTool } from "@anthropic-ai/sdk/helpers/beta/json-schema";
 import { config } from "../config.js";
+import { searchPartnerCatalog } from "../db.js";
 import {
   addMessage,
   addNote,
@@ -463,6 +464,38 @@ export const impls = {
 export function buildTools(ctx: ToolCtx) {
   // Phase 1 (shopping copilot) tools — always on.
   const core = [
+    betaTool({
+      name: "search_partner_catalog",
+      description:
+        "Search the live catalogs of SuperX partner stores (Shopify merchants who installed our app — prices and stock updated in real time by the stores themselves). ALWAYS check this first for any product hunt: exact prices, exact product links, per-size/variant availability. Empty results just mean no partner carries it — fall through to shopify_live_prices/web search. Label these results as partner stores in your reply, and stay willing to say a partner is overpriced vs elsewhere.",
+      inputSchema: {
+        type: "object" as const,
+        properties: {
+          query: { type: "string", description: "Product words, e.g. 'men running shoes'" },
+          size: { type: "string", description: "Optional size/variant filter, e.g. '11' or 'XL'" },
+        },
+        required: ["query"],
+        additionalProperties: false,
+      },
+      run: async (input) => {
+        const { query, size } = input as { query: string; size?: string };
+        const hits = await searchPartnerCatalog(query, size);
+        if (hits.length === 0) return JSON.stringify({ partner_results: [], note: "no partner store carries this — use shopify_live_prices or web search" });
+        return JSON.stringify({
+          partner_results: hits.map((h) => ({
+            store: h.shop_domain.replace(".myshopify.com", ""),
+            title: h.title,
+            variant: h.variant_title,
+            price: fmtMoney(h.price_cents),
+            was: h.compare_at_cents != null ? fmtMoney(h.compare_at_cents) : null,
+            in_stock: h.available,
+            url: `https://${h.shop_domain}/products/${h.handle}?variant=${h.variant_id}`,
+          })),
+          note: "live partner data — exact prices/stock, links go straight to the product",
+        });
+      },
+    }),
+
     betaTool({
       name: "shopify_live_prices",
       description:
