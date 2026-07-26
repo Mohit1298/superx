@@ -79,8 +79,10 @@ export async function handleIncomingMessage(phone: string, text: string, sendTo:
         ...buildTools({ userId: user.id, agentName: config.agentName, sendTo }),
         // Server-side tools (run on Anthropic's infra): live price checks and
         // opening links the member forwarded.
-        { type: "web_search_20260209", name: "web_search", max_uses: 5 },
-        { type: "web_fetch_20260209", name: "web_fetch", max_uses: 3 },
+        // Generous per-turn budget: a 3-retailer head-to-head burns ~6-8
+        // searches. The real cost guardrail is the per-user daily message cap.
+        { type: "web_search_20260209", name: "web_search", max_uses: 12 },
+        { type: "web_fetch_20260209", name: "web_fetch", max_uses: 6 },
       ],
       max_iterations: 10,
     });
